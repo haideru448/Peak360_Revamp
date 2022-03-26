@@ -91,7 +91,7 @@ export default function Blog() {
         "id": currentClientId
       }
 
-      axios.post('https://api-dev.peak360.fitness/client', data).then((response) => {
+      axios.post('https://f623-45-249-10-48.ngrok.io/client', data).then((response) => {
         // handle success
         console.log("the axios api response", response);
 
