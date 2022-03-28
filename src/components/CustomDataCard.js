@@ -108,11 +108,12 @@ export default function StickyHeadTable(props) {
 
                                     </TableCell>
                                     <TableCell >
-                                        {row.Payments[0].Amount}
+                                        {row.Payments[0].Amount}{row.Payments[0].Amount.toString().includes(".") ? null : ".00"}
+
 
                                     </TableCell>
                                     <TableCell >
-                                        {row.SaleDateTime}
+                                        {Date(row.SaleDateTime).toLocaleString()}
 
                                     </TableCell>
 
