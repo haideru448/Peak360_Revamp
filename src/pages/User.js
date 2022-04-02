@@ -157,7 +157,7 @@ export default function User() {
     var day = startDate.getDate();
     var data = { file: "TD_" + String(year) + "0" + String(month) + String(day), file_content: `${clientId}`, date: `${year}-${month}-${day}` }
 
-    axios.post('https://3645-103-152-116-131.ngrok.io/sales_data', data).then((response) => {
+    axios.post('https://api-dev.peak360.fitness/sales_data', data).then((response) => {
       // handle success
       console.log("the axios api response", response);
       setMessage(response.data.message)
@@ -198,7 +198,7 @@ export default function User() {
     if (month < 10) { month = "0" + String(month) }
     if (day < 10) { day = "0" + String(day) }
     var data = { file: "TD_" + String(year) + String(month) + String(day), file_content: `${clientId}`, date: `${year}-${month}-${day}` }
-    axios.post('https://3645-103-152-116-131.ngrok.io/send_to_server', data).then((response) => {
+    axios.post('https://api-dev.peak360.fitness/send_to_server', data).then((response) => {
       // handle success
       console.log("the axios api response", response);
       setMessage(response.data.message)
