@@ -66,8 +66,10 @@ export default function User() {
   let [clientId, setClientId] = React.useState("")
 
   React.useEffect(() => {
-    date = new Date();
-    dateToIso = date.toISOString();
+    date = new Date().toJSON();
+    console.log("the data is", date)
+    dateToIso = date;
+    console.log("the date to iso", dateToIso)
 
     endDate = dateToIso.split(".")[0]
     console.log("The ending Date", endDate)
@@ -113,6 +115,7 @@ export default function User() {
     console.log("Count api data is", sales[0].Payments[0].Amount)
     var Sales = sales.reduce(reducerFunc);
     settodaySalesCount(Sales.Payments[0].Amount)
+    console.log("the today sales", todaySales)
 
   }
   function getClientId() {
@@ -140,17 +143,42 @@ export default function User() {
     return startDate.getFullYear() + "-" + (startDate.getMonth() + 1) + '-' + startDate.getDate();
   }
   function downloadTxtFile() {
-    let element = document.createElement("a");
+    var year = startDate.getFullYear()
+    var month = (startDate.getMonth() + 1)
+    var day = startDate.getDate();
+    var data = { file: "TD_" + String(year) + "0" + String(month) + String(day), file_content: `${clientId}`, date: `${year}-${month}-${day}` }
+
+    axios.post('https://3645-103-152-116-131.ngrok.io/sales_data', data).then((response) => {
+      // handle success
+      console.log("the axios api response", response);
+      setMessage(response.data.message)
+      handleClick()
+      const myTimeout = setTimeout(() => { handleClose() }, 3000);
+      let element = document.createElement("a");
+      let file = new Blob([`${response.data.file_content}`], { type: 'text/plain' });
+      element.href = URL.createObjectURL(file);
+      element.download = response.data.file_name;
+      document.body.appendChild(element); // Required for this to work in FireFox
+      element.click();
+
+
+
+
+
+    }).catch((err) => {
+      console.error("Due to some Error request failed: ", err);
+
+
+    });
+
+
+
     var recordAcessingDate = String(startDate.getFullYear()) + String((startDate.getMonth() + 1)) + String(startDate.getDate());
     console.log(recordAcessingDate)
 
-    let file = new Blob(["888899999999|" + recordAcessingDate + "|1|2|40.19|0.00"], { type: 'text/plain' });
-    element.href = URL.createObjectURL(file);
-    element.download = "TD_" + recordAcessingDate + "| 1 | 2 | 40.19 | 0.00.txt";
-    document.body.appendChild(element); // Required for this to work in FireFox
-    element.click();
-    console.log("The txt file is ", element)
-    var data = { file: "TD" + recordAcessingDate + "12400", file_content: "888899999999" + recordAcessingDate + "1240.190.00" }
+
+
+
 
 
   }
@@ -161,7 +189,7 @@ export default function User() {
     if (month < 10) { month = "0" + String(month) }
     if (day < 10) { day = "0" + String(day) }
     var data = { file: "TD_" + String(year) + String(month) + String(day), file_content: `${clientId}`, date: `${year}-${month}-${day}` }
-    axios.post('https://api-dev.peak360.fitness/send_to_server', data).then((response) => {
+    axios.post('https://3645-103-152-116-131.ngrok.io/send_to_server', data).then((response) => {
       // handle success
       console.log("the axios api response", response);
       setMessage(response.data.message)
