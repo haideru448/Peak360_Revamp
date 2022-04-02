@@ -116,7 +116,7 @@ export default function StickyHeadTable(props) {
                                     </TableCell>
                                     <TableCell >
                                         <span style={{ display: "none" }}>{
-                                            dt = new Date(row.SaleDateTime).toLocaleString('default', { month: 'long', year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" })}</span>
+                                            dt = new Date(row.SaleDateTime).toLocaleString('default', { month: 'long', year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit", day: "2-digit" })}</span>
                                         {dt}
 
 

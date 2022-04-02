@@ -66,7 +66,16 @@ export default function User() {
   let [clientId, setClientId] = React.useState("")
 
   React.useEffect(() => {
-    date = new Date().toJSON();
+
+    var date, offset, nd, utc;
+    date = new Date();
+    utc = date.getTime() + (date.getTimezoneOffset() * 60000);
+
+    // Singapore is GMT+8
+    offset = 8;
+
+    nd = new Date(utc + (3600000 * offset));
+    date = nd.toJSON()
     console.log("the data is", date)
     dateToIso = date;
     console.log("the date to iso", dateToIso)
