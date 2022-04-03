@@ -7,6 +7,7 @@ import Snackbar from '@mui/material/Snackbar';
 import DatePicker from 'react-datepicker'
 import TextField from '@mui/material/TextField';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import moment from "moment-timezone"
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { parseISO } from 'date-fns';
 // material
@@ -43,16 +44,7 @@ import USERLIST from '../_mocks_/user';
 
 // ----------------------------------------------------------------------
 
-let TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
-  { id: '' }
-];
-let dateToIso;
-let date;
+
 let endDate;
 // ----------------------------------------------------------------------
 
@@ -67,22 +59,9 @@ export default function User() {
 
   React.useEffect(() => {
 
-    var date, offset, nd, utc;
-    date = new Date();
-    utc = date.getTime() + (date.getTimezoneOffset() * 60000);
+    endDate = moment().tz("Asia/Singapore").format().split("+")[0]
 
-    // Singapore is GMT+8
-    offset = 8;
-
-    nd = new Date(utc + (3600000 * offset));
-    date = nd.toJSON()
-    console.log("the data is", date)
-    dateToIso = date;
-    console.log("the date to iso", dateToIso)
-
-    endDate = dateToIso.split(".")[0]
-    console.log("The ending Date", endDate)
-    startDate = dateToIso.split("T")[0] + "T" + "00:00:00"
+    startDate = endDate.split("T")[0] + "T" + "00:00:00"
 
 
     let options = {
@@ -152,6 +131,7 @@ export default function User() {
     return startDate.getFullYear() + "-" + (startDate.getMonth() + 1) + '-' + startDate.getDate();
   }
   function downloadTxtFile() {
+    console.log("The start date is", startDate)
     var year = startDate.getFullYear()
     var month = (startDate.getMonth() + 1)
     var day = startDate.getDate();
@@ -185,18 +165,13 @@ export default function User() {
     var recordAcessingDate = String(startDate.getFullYear()) + String((startDate.getMonth() + 1)) + String(startDate.getDate());
     console.log(recordAcessingDate)
 
-
-
-
-
-
   }
   function SendToServer() {
-    var year = startDate.getFullYear()
-    var month = (startDate.getMonth() + 1)
-    var day = startDate.getDate();
-    if (month < 10) { month = "0" + String(month) }
-    if (day < 10) { day = "0" + String(day) }
+    console.log("The start date is Server", startDate)
+    var year = startDate.split("-")[0]
+    var month = startDate.split("-")[1]
+    var day = startDate.split("-")[2].slice(0, 2)
+
     var data = { file: "TD_" + String(year) + String(month) + String(day), file_content: `${clientId}`, date: `${year}-${month}-${day}` }
     axios.post('https://api-dev.peak360.fitness/send_to_server', data).then((response) => {
       // handle success
@@ -220,21 +195,14 @@ export default function User() {
     setStartDate(startDate);
   };
   function getDataOfParticularDate() {
-    console.log("interactive work")
-    console.log("Data of a particular data ", startDate)
-    var startDateinIsOFormat = startDate.toISOString().split('T')[0]
-    console.log("the start date in iso", startDateinIsOFormat)
-    var d = new Date();
-    var n = d.toLocaleTimeString();
-    var currentTime = n.split(' ')[0];
-    var endDate = startDateinIsOFormat + "T" + currentTime
-    var startDatee = startDateinIsOFormat + "T" + "00:00:00"
+
+    endDate = moment().tz("Asia/Singapore").format().split("+")[0]
 
     let options = {
       method: "get",
 
 
-      url: "https://api-dev.peak360.fitness/sales?start_date=" + startDatee + "&end_date=" + endDate,
+      url: "https://api-dev.peak360.fitness/sales?start_date=" + startDate + "&end_date=" + endDate,
 
     };
 
