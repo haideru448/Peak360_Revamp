@@ -9,7 +9,9 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
 let dt;
-
+const monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+];
 const columns = [
     { id: 'name', label: 'Name', minWidth: 170 },
     { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
@@ -115,9 +117,17 @@ export default function StickyHeadTable(props) {
 
                                     </TableCell>
                                     <TableCell >
-                                        <span style={{ display: "none" }}>{
-                                            dt = new Date(row.SaleDateTime).toLocaleString('default', { month: 'long', year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit", day: "2-digit" })}</span>
-                                        {dt}
+                                        {row.SaleDateTime.split("-")[2].slice(0, 2)}&nbsp;
+                                        {monthNames[parseInt(row.SaleDateTime.split("-")[1], 10) - 1]}&nbsp;&nbsp;
+                                        {row.SaleDateTime.split("T")[1].slice(0, 8)
+
+
+                                        } &nbsp;
+                                        {row.SaleDateTime.split("-")[0]
+
+                                        }&nbsp;
+
+
 
 
 
