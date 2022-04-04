@@ -58,17 +58,12 @@ export default function User() {
   let [clientId, setClientId] = React.useState("")
 
   React.useEffect(() => {
-
     endDate = moment().tz("Asia/Singapore").format().split("+")[0]
-
-    startDate = endDate.split("T")[0] + "T" + "00:00:00"
-
-
     let options = {
       method: "get",
 
 
-      url: "https://api-dev.peak360.fitness/sales?start_date=" + startDate + "&end_date=" + endDate,
+      url: "https://api-dev.peak360.fitness/sales?start_date=" + endDate.split("T")[0] + "T" + "00:00:00" + "&end_date=" + endDate,
 
     };
     axios(options).then(function (response) {
@@ -87,9 +82,7 @@ export default function User() {
 
 
   }, []);
-  let handleStartDate = (date) => {
-    setStartDate(date);
-  };
+
   const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
@@ -167,10 +160,11 @@ export default function User() {
 
   }
   function SendToServer() {
-    console.log("The start date is Server", startDate)
-    var year = startDate.split("-")[0]
-    var month = startDate.split("-")[1]
-    var day = startDate.split("-")[2].slice(0, 2)
+    console.log("The start date is Server",)
+    var startDateinIso = startDate.toISOString()
+    var year = startDateinIso.split("-")[0]
+    var month = startDateinIso.split("-")[1]
+    var day = startDateinIso.split("-")[2].slice(0, 2)
 
     var data = { file: "TD_" + String(year) + String(month) + String(day), file_content: `${clientId}`, date: `${year}-${month}-${day}` }
     axios.post('https://api-dev.peak360.fitness/send_to_server', data).then((response) => {
@@ -197,12 +191,14 @@ export default function User() {
   function getDataOfParticularDate() {
 
     endDate = moment().tz("Asia/Singapore").format().split("+")[0]
+    console.log("start date in get sales ", startDate.toISOString())
+    console.log("The end date in getsales", endDate)
 
     let options = {
       method: "get",
 
 
-      url: "https://api-dev.peak360.fitness/sales?start_date=" + startDate + "&end_date=" + endDate,
+      url: "https://api-dev.peak360.fitness/sales?start_date=" + startDate.toISOString().split("T")[0] + "T00:00:00" + "&end_date=" + startDate.toISOString().split("T")[0] + "T" + endDate.split("T")[1],
 
     };
 
