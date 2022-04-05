@@ -191,6 +191,7 @@ export default function User() {
   }
 
   const handleChange = (newValue) => {
+    console.log("the new valuee", newValue)
     startDate = newValue
     setStartDate(startDate);
   };
