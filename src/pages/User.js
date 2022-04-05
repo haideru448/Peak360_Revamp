@@ -58,7 +58,11 @@ export default function User() {
   let [clientId, setClientId] = React.useState("")
 
   React.useEffect(() => {
-    endDate = moment().tz("Asia/Singapore").format().split("+")[0]
+    {/*endDate = moment().tz("Asia/Singapore").format().split("+")[0]*/ }
+    endDate = moment().format().split("+")[0]
+
+    console.log("Moment with time zones", endDate)
+    console.log("Momemnt without time zone", moment().format().split("+")[0])
     let options = {
       method: "get",
 
@@ -192,7 +196,7 @@ export default function User() {
   };
   function getDataOfParticularDate() {
 
-    endDate = moment().tz("Asia/Singapore").format().split("+")[0]
+    endDate = moment().format().split("+")[0]
     console.log("start date in get sales ", startDate.toISOString())
     console.log("The end date in getsales", endDate)
 
@@ -242,7 +246,7 @@ export default function User() {
               </LocalizationProvider>
               <p></p>
               <Typography>You have selected {retrieveStartDate()}</Typography><br />
-              <Button variant="contained" onClick={getDataOfParticularDate}> Get Sales </Button>
+              <Button variant="contained" onClick={getDataOfParticularDate}> Show Records </Button>
               <br />
 
               <br /><br />
@@ -257,7 +261,7 @@ export default function User() {
     <br></br>
     <br></br>
 
-    <center><Button variant="contained" onClick={downloadTxtFile}>Download .Txt </Button> <Button variant="contained" onClick={SendToServer}>Send to Server</Button></center>
+    <center><Button variant="contained" onClick={downloadTxtFile}>Download </Button> <Button variant="contained" onClick={SendToServer}>Send</Button></center>
     <br></br>
     <MuiDataCard salesData={todaySales} />
   </div>
