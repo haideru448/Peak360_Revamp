@@ -173,7 +173,7 @@ export default function User() {
     var day = startDateinIso.split("-")[2].slice(0, 2)
 
     var data = { file: "TD_" + String(year) + String(month) + String(day), file_content: `${clientId}`, date: `${year}-${month}-${day}` }
-    axios.post('https://c971-72-255-39-173.ngrok.io/send_to_server', data).then((response) => {
+    axios.post('https://api-dev.peak360.fitness/send_to_server', data).then((response) => {
       // handle success
       console.log("the axios api response", response);
       setMessage(response.data.message)
