@@ -4,13 +4,15 @@ import { sentenceCase } from 'change-case';
 import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import Snackbar from '@mui/material/Snackbar';
-import DatePicker from 'react-datepicker'
+
 import TextField from '@mui/material/TextField';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import moment from "moment-timezone"
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import { DatePicker } from "antd";
+
 import { parseISO } from 'date-fns';
 // material
 import {
@@ -177,11 +179,10 @@ export default function User() {
 
   }
   function SendToServer() {
-    console.log("The start date is Server",moment(startDate).tz("Asia/Singapore").format())
-    var startDateinIso = moment(startDate).tz("Asia/Singapore").format()
-    var year = startDateinIso.split("-")[0]
-    var month = startDateinIso.split("-")[1]
-    var day = startDateinIso.split("-")[2].slice(0, 2)
+    
+    var year =  String(startDate.getFullYear())
+    var month =  String((startDate.getMonth() + 1))
+    var day =  String(startDate.getDate())
 
   var data = { file: "TD_" + String(year) + String(month) + String(day), file_content: `${clientId}`, date: `${year}-${month}-${day}` }
     axios.post('https://api-dev.peak360.fitness/send_to_server', data).then((response) => {
@@ -203,13 +204,23 @@ export default function User() {
 
   const handleChange = (newValue) => {
     console.log("the new valuee", newValue)
-    console.log(moment(newValue).tz("Asia/Singapore").format())
+  
     startDate = newValue
     setStartDate(startDate);
   };
   function getDataOfParticularDate() {
     handleSpinnerToggle()
-    console.log(startDate)
+    console.log("The start Date without converting to anything",startDate)
+    console.log(startDate.getMonth()+1)
+    console.log("The date",startDate.getDate())
+    console.log("The date",startDate.getFullYear())
+    var currentMonth=startDate.getMonth()+1
+    currentMonth="0"+currentMonth
+    var currentDate="0"+startDate.getDate()
+
+    
+
+
 
     endDate = moment().tz("Asia/Singapore").format().split("+")[0]
     
@@ -218,7 +229,7 @@ export default function User() {
       method: "get",
 
 
-      url: "https://api-dev.peak360.fitness/sales?start_date=" + moment(startDate).tz("Asia/Singapore").format().split("T")[0] + "T00:00:00" + "&end_date=" + startDate.toISOString().split("T")[0] + "T" + endDate.split("T")[1],
+      url: "https://api-dev.peak360.fitness/sales?start_date=" +startDate.getFullYear() +"-"+currentMonth+"-"+currentDate+ "T00:00:00" + "&end_date=" + startDate.toISOString().split("T")[0] + "T" + endDate.split("T")[1],
 
     };
 
