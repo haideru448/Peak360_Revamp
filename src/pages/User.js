@@ -58,8 +58,8 @@ export default function User() {
   let [clientId, setClientId] = React.useState("")
 
   React.useEffect(() => {
-    {/*endDate = moment().tz("Asia/Singapore").format().split("+")[0]*/ }
-    endDate = moment().format().split("+")[0]
+    endDate = moment().tz("Asia/Singapore").format().split("+")[0]
+    
 
     console.log("Moment with time zones", endDate)
     console.log("Momemnt without time zone", moment().format().split("+")[0])
@@ -166,13 +166,13 @@ export default function User() {
 
   }
   function SendToServer() {
-    console.log("The start date is Server",)
-    var startDateinIso = startDate.toISOString()
+    console.log("The start date is Server",moment(startDate).tz("Asia/Singapore").format())
+    var startDateinIso = moment(startDate).tz("Asia/Singapore").format()
     var year = startDateinIso.split("-")[0]
     var month = startDateinIso.split("-")[1]
     var day = startDateinIso.split("-")[2].slice(0, 2)
 
-    var data = { file: "TD_" + String(year) + String(month) + String(day), file_content: `${clientId}`, date: `${year}-${month}-${day}` }
+  var data = { file: "TD_" + String(year) + String(month) + String(day), file_content: `${clientId}`, date: `${year}-${month}-${day}` }
     axios.post('https://api-dev.peak360.fitness/send_to_server', data).then((response) => {
       // handle success
       console.log("the axios api response", response);
@@ -192,20 +192,21 @@ export default function User() {
 
   const handleChange = (newValue) => {
     console.log("the new valuee", newValue)
+    console.log(moment(newValue).tz("Asia/Singapore").format())
     startDate = newValue
     setStartDate(startDate);
   };
   function getDataOfParticularDate() {
+    console.log(startDate)
 
-    endDate = moment().format().split("+")[0]
-    console.log("start date in get sales ", startDate.toISOString())
-    console.log("The end date in getsales", endDate)
+    endDate = moment().tz("Asia/Singapore").format().split("+")[0]
+    
 
     let options = {
       method: "get",
 
 
-      url: "https://api-dev.peak360.fitness/sales?start_date=" + startDate.toISOString().split("T")[0] + "T00:00:00" + "&end_date=" + startDate.toISOString().split("T")[0] + "T" + endDate.split("T")[1],
+      url: "https://api-dev.peak360.fitness/sales?start_date=" + moment(startDate).tz("Asia/Singapore").format().split("T")[0] + "T00:00:00" + "&end_date=" + startDate.toISOString().split("T")[0] + "T" + endDate.split("T")[1],
 
     };
 
@@ -218,7 +219,7 @@ export default function User() {
       console.error("Customer API error: ", err);
 
     });
-    SendToServer()
+    SendToServer() 
   }
   return (<div>
     <Snackbar
