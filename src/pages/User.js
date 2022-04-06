@@ -7,6 +7,8 @@ import Snackbar from '@mui/material/Snackbar';
 import DatePicker from 'react-datepicker'
 import TextField from '@mui/material/TextField';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import moment from "moment-timezone"
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { parseISO } from 'date-fns';
@@ -58,6 +60,7 @@ export default function User() {
   let [clientId, setClientId] = React.useState("")
 
   React.useEffect(() => {
+    handleSpinnerToggle()
     endDate = moment().tz("Asia/Singapore").format().split("+")[0]
     
 
@@ -75,6 +78,7 @@ export default function User() {
       console.log("the axios api response", response.data.total_sales.Sales);
       setTodaySales(response.data.total_sales.Sales)
       countSales(response.data.total_sales.Sales)
+      setTimeout(handleSpinnerClose(), 5000);
 
     }).catch((err) => {
       console.log('Customer API error:', err);
@@ -88,6 +92,13 @@ export default function User() {
   }, []);
 
   const [open, setOpen] = React.useState(false);
+  const [openSpinner, setOpenSpinner] = React.useState(false);
+  const handleSpinnerClose = () => {
+    setOpenSpinner(false);
+  };
+  const handleSpinnerToggle = () => {
+    setOpenSpinner(!openSpinner);
+  };
 
   const handleClick = () => {
     setOpen(true);
@@ -197,6 +208,7 @@ export default function User() {
     setStartDate(startDate);
   };
   function getDataOfParticularDate() {
+    handleSpinnerToggle()
     console.log(startDate)
 
     endDate = moment().tz("Asia/Singapore").format().split("+")[0]
@@ -214,6 +226,7 @@ export default function User() {
       // handle success
       console.log("the axios api response", response.data.total_sales.Sales);
       setTodaySales(response.data.total_sales.Sales)
+      handleSpinnerClose()
 
     }).catch((err) => {
       console.error("Customer API error: ", err);
@@ -230,6 +243,13 @@ export default function User() {
 
     />
     <center>
+    <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={openSpinner}
+        onClick={handleSpinnerClose}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <table>
         <thead>
           <tr>
