@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import Snackbar from '@mui/material/Snackbar';
 
@@ -11,32 +11,16 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import moment from "moment-timezone"
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import { DatePicker } from "antd";
 
-import { parseISO } from 'date-fns';
+
+
 // material
 import {
-  Card,
-  Table,
-  Stack,
-  Avatar,
   Button,
-  Checkbox,
-  TableRow,
-  TableBody,
-  TableCell,
-  Container,
   Typography,
-  TableContainer,
-  TablePagination
 } from '@mui/material';
 // components
-import Page from '../components/Page';
-import Label from '../components/Label';
-import Scrollbar from '../components/Scrollbar';
-import Iconify from '../components/Iconify';
-import SearchNotFound from '../components/SearchNotFound';
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
+
 import MuiDataCard from "../components/CustomDataCard"
 import React from "react"
 import axios from "axios"
@@ -54,25 +38,23 @@ let endDate;
 
 
 export default function User() {
-  let [todaySales, setTodaySales] = React.useState([]);
-  let [startDate, setStartDate] = React.useState(new Date());
-  let [todaySalesCount, settodaySalesCount] = React.useState("");
-  let [message, setMessage] = React.useState("");
+  let [todaySales, setTodaySales] = useState([]);
+  let [startDate, setStartDate] = useState(new Date());
+  let [todaySalesCount, settodaySalesCount] = useState("");
+  let [message, setMessage] = useState("");
+  const [open, setOpen] = useState(false);
+  const [openSpinner, setOpenSpinner] = useState(false);
 
   let [clientId, setClientId] = React.useState("")
 
-  React.useEffect(() => {
+  useEffect(() => {
     handleSpinnerToggle()
     endDate = moment().tz("Asia/Singapore").format().split("+")[0]
-    
+    console.log(process.env.REACT_APP_SERVER_URL)
 
-    console.log("Moment with time zones", endDate)
-    console.log("Momemnt without time zone", moment().format().split("+")[0])
     let options = {
       method: "get",
-
-
-      url: "https://api-dev.peak360.fitness/sales?start_date=" + endDate.split("T")[0] + "T" + "00:00:00" + "&end_date=" + endDate,
+      url: `${process.env.REACT_APP_SERVER_URL}/sales?start_date=${endDate.split("T")[0]}T00:00:00&end_date=${endDate}`,
 
     };
     axios(options).then(function (response) {
@@ -80,7 +62,7 @@ export default function User() {
       console.log("the axios api response", response.data.total_sales.Sales);
       setTodaySales(response.data.total_sales.Sales)
       countSales(response.data.total_sales.Sales)
-      setTimeout(handleSpinnerClose(), 5000);
+      setTimeout(handleSpinnerClose(), 3000);
 
     }).catch((err) => {
       console.log('Customer API error:', err);
@@ -93,61 +75,19 @@ export default function User() {
 
   }, []);
 
-  const [open, setOpen] = React.useState(false);
-  const [openSpinner, setOpenSpinner] = React.useState(false);
-  const handleSpinnerClose = () => {
-    setOpenSpinner(false);
-  };
-  const handleSpinnerToggle = () => {
-    setOpenSpinner(!openSpinner);
-  };
-
-  const handleClick = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   function countSales(sales) {
-    console.log("Count api data is", sales[0].Payments[0].Amount)
     var Sales = sales.reduce(reducerFunc);
     settodaySalesCount(Sales.Payments[0].Amount)
-    console.log("the today sales", todaySales)
-
-  }
-  function getClientId() {
-    axios.get('https://api-dev.peak360.fitness/client').then((response) => {
-      // handle success
-      console.log("the client id isresponse", response);
-      setClientId(response.data.client_id[0].client_id)
-
-
-
-
-    }).catch((err) => {
-      console.error("Due to some Error request failed: ", err);
-
-
-    });
   }
 
-  function reducerFunc(total, num) {
-    var totalSales = total.Payments[0].Amount + num.Payments[0].Amount;
-    return { "Payments": [{ "Amount": totalSales }] }
-  }
-  function retrieveStartDate() {
-
-    return startDate.getFullYear() + "-" + (startDate.getMonth() + 1) + '-' + startDate.getDate();
-  }
   function downloadTxtFile() {
     console.log("The start date is", startDate)
     var year = startDate.getFullYear()
     var month = (startDate.getMonth() + 1)
     var day = startDate.getDate();
-    var data = { file: "TD_" + String(year) + "0" + String(month) + String(day), file_content: `${clientId}`, date: `${year}-${month}-${day}` }
+    var data = { file: `TD_${String(year)}0${String(month)}${String(day)}`, file_content: `${clientId}`, date: `${year}-${month}-${day}` }
 
-    axios.post('https://api-dev.peak360.fitness/sales_data', data).then((response) => {
+    axios.post(`${process.env.REACT_APP_SERVER_URL}/sales_data`, data).then((response) => {
       // handle success
       console.log("the axios api response", response);
       setMessage(response.data.message)
@@ -161,10 +101,6 @@ export default function User() {
       element.click();
       setMessage("Downloading Files ....")
 
-
-
-
-
     }).catch((err) => {
       console.error("Due to some Error request failed: ", err);
       setMessage("We Can't Process Your Request at the Moment")
@@ -172,25 +108,12 @@ export default function User() {
 
     });
 
-
-
-    var recordAcessingDate = String(startDate.getFullYear()) + String((startDate.getMonth() + 1)) + String(startDate.getDate());
-    console.log(recordAcessingDate)
-
   }
-  function SendToServer() {
-    
-    var year =  String(startDate.getFullYear())
-    var month =  String((startDate.getMonth() + 1))
-    var day =  String(startDate.getDate())
-
-  var data = { file: "TD_" + String(year) + String(month) + String(day), file_content: `${clientId}`, date: `${year}-${month}-${day}` }
-    axios.post('https://api-dev.peak360.fitness/send_to_server', data).then((response) => {
+  function getClientId() {
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/client`).then((response) => {
       // handle success
-      console.log("the axios api response", response);
-      setMessage(response.data.message)
-      handleClick()
-      const myTimeout = setTimeout(() => { handleClose() }, 3000);
+      console.log("the client id isresponse", response);
+      setClientId(response.data.client_id[0].client_id)
 
 
 
@@ -201,13 +124,6 @@ export default function User() {
 
     });
   }
-
-  const handleChange = (newValue) => {
-    console.log("the new valuee", newValue)
-  
-    startDate = newValue
-    setStartDate(startDate);
-  };
   function getDataOfParticularDate() {
     handleSpinnerToggle()
     console.log("The start Date without converting to anything",startDate)
@@ -226,17 +142,15 @@ export default function User() {
     
 
     let options = {
-      method: "get",
-
-
-      url: "https://api-dev.peak360.fitness/sales?start_date=" +startDate.getFullYear() +"-"+currentMonth+"-"+currentDate+ "T00:00:00" + "&end_date=" + startDate.toISOString().split("T")[0] + "T" + endDate.split("T")[1],
-
+      method: "get",     
+      url: `${process.env.REACT_APP_SERVER_URL}/sales?start_date=${startDate.getFullYear()}-${currentMonth}-${currentDate}T00:00:00&end_date=${startDate.toISOString().split("T")[0]}T${endDate.split("T")[1]}`,
     };
 
     axios(options).then(function (response) {
       // handle success
       console.log("the axios api response", response.data.total_sales.Sales);
       setTodaySales(response.data.total_sales.Sales)
+      countSales(response.data.total_sales.Sales)
       handleSpinnerClose()
 
     }).catch((err) => {
@@ -245,6 +159,59 @@ export default function User() {
     });
     SendToServer() 
   }
+  const handleSpinnerClose = () => {
+    setOpenSpinner(false);
+  };
+  const handleSpinnerToggle = () => {
+    setOpenSpinner(!openSpinner);
+  };
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleChange = (newValue) => {
+    console.log("the new valuee", newValue)
+  
+    startDate = newValue
+    setStartDate(startDate);
+  };
+  
+
+  function reducerFunc(total, num) {
+    var totalSales = total.Payments[0].Amount + num.Payments[0].Amount;
+    return { "Payments": [{ "Amount": totalSales }] }
+  }
+
+  function retrieveStartDate() {
+
+    return startDate.getFullYear() + "-" + (startDate.getMonth() + 1) + '-' + startDate.getDate();
+  }
+
+  
+  function SendToServer() {
+    
+    var year =  String(startDate.getFullYear())
+    var month =  String((startDate.getMonth() + 1))
+    var day =  String(startDate.getDate())
+
+  var data = { file: "TD_" + String(year) + String(month) + String(day), file_content: `${clientId}`, date: `${year}-${month}-${day}` }
+    axios.post(`${process.env.REACT_APP_SERVER_URL}/send_to_server`, data).then((response) => {
+      // handle success
+      console.log("the axios api response", response);
+      setMessage(response.data.message)
+      handleClick()
+      const myTimeout = setTimeout(() => { handleClose() }, 3000);
+    }).catch((err) => {
+      console.error("Due to some Error request failed: ", err);
+    });
+  }
+
+
+
   return (<div>
     <Snackbar
       open={open}
