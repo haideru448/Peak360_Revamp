@@ -54,7 +54,7 @@ export default function User() {
 
     let options = {
       method: "get",
-      url: `${process.env.REACT_APP_SERVER_URL}/sales?start_date=${endDate.split("T")[0]}T00:00:00&end_date=${endDate}`,
+      url: `${process.env.REACT_APP_SERVER_URL}/sales?start_date=${endDate.split("T")[0]}T00:00:00&end_date=23:59:59`,
 
     };
     axios(options).then(function (response) {
@@ -143,7 +143,7 @@ export default function User() {
 
     let options = {
       method: "get",     
-      url: `${process.env.REACT_APP_SERVER_URL}/sales?start_date=${startDate.getFullYear()}-${currentMonth}-${currentDate}T00:00:00&end_date=${startDate.toISOString().split("T")[0]}T${endDate.split("T")[1]}`,
+      url: `${process.env.REACT_APP_SERVER_URL}/sales?start_date=${startDate.getFullYear()}-${currentMonth}-${currentDate}T00:00:00&end_date=${startDate.toISOString().split("T")[0]}T23:59:59`,
     };
 
     axios(options).then(function (response) {
@@ -195,8 +195,8 @@ export default function User() {
   function SendToServer() {
     
     var year =  String(startDate.getFullYear())
-    var month =  String((startDate.getMonth() + 1))
-    var day =  String(startDate.getDate())
+    var month =  "0"+String((startDate.getMonth() + 1))
+    var day =  "0"+String(startDate.getDate())
 
   var data = { file: "TD_" + String(year) + String(month) + String(day), file_content: `${clientId}`, date: `${year}-${month}-${day}` }
     axios.post(`${process.env.REACT_APP_SERVER_URL}/send_to_server`, data).then((response) => {
