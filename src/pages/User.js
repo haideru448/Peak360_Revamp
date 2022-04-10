@@ -131,7 +131,8 @@ export default function User() {
     console.log("The date",startDate.getFullYear())
     var currentMonth=startDate.getMonth()+1
     currentMonth="0"+currentMonth
-    var currentDate="0"+startDate.getDate()
+    var currentDate=parseInt(startDate.getDate())<=9 &&String(startDate.getDate()).slice(0,1)!='0'?"0"+String(startDate.getDate()):String(startDate.getDate())
+  
 
     
 
@@ -142,7 +143,7 @@ export default function User() {
 
     let options = {
       method: "get",     
-      url: `${process.env.REACT_APP_SERVER_URL}/sales?start_date=${startDate.getFullYear()}-${currentMonth}-${currentDate}T00:00:00&end_date=${startDate.toISOString().split("T")[0]}T23:59:59`,
+      url: `${process.env.REACT_APP_SERVER_URL}/sales?start_date=${startDate.getFullYear()}-${currentMonth}-${currentDate}T00:00:00&end_date=${startDate.getFullYear()}-${currentMonth}-${currentDate}T23:59:59`,
     };
 
     axios(options).then(function (response) {
