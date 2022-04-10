@@ -143,7 +143,7 @@ export default function User() {
 
     let options = {
       method: "get",     
-      url: `https://44fa-103-152-116-134.ngrok.io/sales?start_date=${startDate.getFullYear()}-${currentMonth}-${currentDate}T00:00:00&end_date=${startDate.toISOString().split("T")[0]}T23:59:59`,
+      url: `${process.env.REACT_APP_SERVER_URL}/sales?start_date=${startDate.getFullYear()}-${currentMonth}-${currentDate}T00:00:00&end_date=${startDate.toISOString().split("T")[0]}T23:59:59`,
     };
 
     axios(options).then(function (response) {
@@ -199,7 +199,7 @@ export default function User() {
     var day = parseInt(startDate.getDate())<=9 &&String(startDate.getDate()).slice(0,1)!='0'?"0"+String(startDate.getDate()):String(startDate.getDate())
 
   var data = { file: "TD_" + String(year) + String(month) + String(day), file_content: `${clientId}`, date: `${year}-${month}-${day}` }
-    axios.post(`https://44fa-103-152-116-134.ngrok.io/send_to_server`, data).then((response) => {
+    axios.post(`${process.env.REACT_APP_SERVER_URL}/send_to_server`, data).then((response) => {
       // handle success
       console.log("the axios api response", response);
       setMessage(response.data.message)
