@@ -53,7 +53,7 @@ export default function User() {
 
     let options = {
       method: "get",
-      url: `${process.env.REACT_APP_SERVER_URL}/sales?start_date=${endDate.split("T")[0]}T00:00:00&end_date=23:59:59`,
+      url: `${process.env.REACT_APP_SERVER_URL}/sales?start_date=${endDate.split("T")[0]}T00:00:00&end_date=${endDate.split("T")[0]}T23:59:59`,
 
     };
     axios(options).then(function (response) {
