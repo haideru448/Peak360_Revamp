@@ -129,9 +129,6 @@ export default function StickyHeadTable(props) {
 
 
 
-
-
-
                                     </TableCell>
 
 
