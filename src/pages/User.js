@@ -251,7 +251,7 @@ export default function User() {
 
               <br /><br />
 
-              <AppWeeklySales sx={{ marginTop: "30px", marginBottom: "30px" }} label="Today Sales $USD" salesCount={todaySalesCount} />
+              <AppWeeklySales sx={{ marginTop: "30px", marginBottom: "30px" }} label="Total Sales $USD" salesCount={todaySalesCount} />
 
             </th>
           </tr>
