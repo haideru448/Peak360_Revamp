@@ -9,6 +9,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import moment from "moment-timezone"
+import Tooltip from '@mui/material/Tooltip';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
 
@@ -246,7 +247,7 @@ export default function User() {
               </LocalizationProvider>
               <p></p>
               <Typography>You have selected {retrieveStartDate()}</Typography><br />
-              <Button variant="contained" onClick={getDataOfParticularDate}> Show Records </Button>
+              <Tooltip title="Dummy Txt" arrow><Button variant="contained" onClick={getDataOfParticularDate}> Show Records </Button></Tooltip>
               <br />
 
               <br /><br />
@@ -261,7 +262,7 @@ export default function User() {
     <br></br>
     <br></br>
 
-    <center><Button variant="contained" onClick={downloadTxtFile}>Download </Button> <Button variant="contained" onClick={SendToServer}>Send</Button></center>
+    <center><Tooltip title="Dummy Txt" arrow><Button variant="contained" onClick={downloadTxtFile}>Download </Button></Tooltip> <Tooltip title="Dummy Txt" arrow><Button variant="contained" onClick={SendToServer}>Send</Button></Tooltip></center>
     <br></br>
     <MuiDataCard salesData={todaySales} />
   </div>
