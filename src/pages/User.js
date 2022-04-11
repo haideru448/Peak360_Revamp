@@ -34,6 +34,9 @@ import USERLIST from '../_mocks_/user';
 
 
 let endDate;
+let endDateTime;
+let i=0;
+let j=0;
 // ----------------------------------------------------------------------
 
 
@@ -54,7 +57,7 @@ export default function User() {
 
     let options = {
       method: "get",
-      url: `${process.env.REACT_APP_SERVER_URL}/sales?start_date=${endDate.split("T")[0]}T00:00:00&end_date=${endDate.split("T")[0]}T23:59:59`,
+      url: `${process.env.REACT_APP_SERVER_URL}/sales?start_date=${endDate.split("T")[0]}T00:00:00&end_date=${endDate.split("+")[0]}`,
 
     };
     axios(options).then(function (response) {
@@ -75,9 +78,15 @@ export default function User() {
 
   }, []);
 
-  function countSales(sales) {
-    var Sales = sales.reduce(reducerFunc);
-    settodaySalesCount(Sales.Payments[0].Amount)
+  function countSales(Sales) {
+    var totalSales=0;
+   
+    for(i=0;i<Sales.length;i++)
+    {for (j=0;j<Sales[i].PurchasedItems.length;j++)
+    {totalSales+=Sales[i].PurchasedItems[j].TotalAmount-Sales[i].PurchasedItems[j].TaxAmount}
+    }
+    
+    settodaySalesCount(totalSales)
   }
 
   function downloadTxtFile() {
@@ -140,11 +149,17 @@ export default function User() {
 
 
     endDate = moment().tz("Asia/Singapore").format().split("+")[0]
+    if(currentDate===endDate.split("-")[2].split("T")[0])
+    {console.log("Yes")
+    endDateTime=endDate.split("T")[1]
+    endDateTime="T"+endDateTime
+  }
+  else{endDateTime="T23:59:59"}
     
 
     let options = {
       method: "get",     
-      url: `${process.env.REACT_APP_SERVER_URL}/sales?start_date=${startDate.getFullYear()}-${currentMonth}-${currentDate}T00:00:00&end_date=${startDate.getFullYear()}-${currentMonth}-${currentDate}T23:59:59`,
+      url: `${process.env.REACT_APP_SERVER_URL}/sales?start_date=${startDate.getFullYear()}-${currentMonth}-${currentDate}T00:00:00&end_date=${startDate.getFullYear()}-${currentMonth}-${currentDate}${endDateTime}`,
     };
 
     axios(options).then(function (response) {
@@ -182,10 +197,7 @@ export default function User() {
   };
   
 
-  function reducerFunc(total, num) {
-    var totalSales = total.Payments[0].Amount + num.Payments[0].Amount;
-    return { "Payments": [{ "Amount": totalSales }] }
-  }
+
 
   function retrieveStartDate() {
 
@@ -247,12 +259,12 @@ export default function User() {
               </LocalizationProvider>
               <p></p>
               <Typography>You have selected {retrieveStartDate()}</Typography><br />
-              <Tooltip title="Dummy Txt" arrow><Button variant="contained" onClick={getDataOfParticularDate}> Show Records </Button></Tooltip>
+              <Tooltip title="To retrieve sales based on the date selected" arrow><Button variant="contained" onClick={getDataOfParticularDate}> Show Records </Button></Tooltip>
               <br />
 
               <br /><br />
 
-              <AppWeeklySales sx={{ marginTop: "30px", marginBottom: "30px" }} label="Total Sales $USD" salesCount={todaySalesCount} />
+              <AppWeeklySales sx={{ marginTop: "30px", marginBottom: "30px" }} label="Total Sales" salesCount={todaySalesCount} />
 
             </th>
           </tr>
@@ -262,7 +274,7 @@ export default function User() {
     <br></br>
     <br></br>
 
-    <center><Tooltip title="Dummy Txt" arrow><Button variant="contained" onClick={downloadTxtFile}>Download </Button></Tooltip> <Tooltip title="Dummy Txt" arrow><Button variant="contained" onClick={SendToServer}>Send</Button></Tooltip></center>
+    <center><Tooltip title="To download a .txt file based on the date selected" arrow><Button variant="contained" onClick={downloadTxtFile}>Download </Button></Tooltip> <Tooltip title="To send the same .txt file to your server, based on the date selected" arrow><Button variant="contained" onClick={SendToServer}>Send</Button></Tooltip></center>
     <br></br>
     <MuiDataCard salesData={todaySales} />
   </div>
