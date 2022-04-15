@@ -212,7 +212,7 @@ export default function User() {
     var day = parseInt(startDate.getDate())<=9 &&String(startDate.getDate()).slice(0,1)!='0'?"0"+String(startDate.getDate()):String(startDate.getDate())
 
   var data = { file: "TD_" + String(year) + String(month) + String(day), file_content: `${clientId}`, date: `${year}-${month}-${day}` }
-    axios.post(`https://152f-117-20-29-222.ngrok.io/send_to_server`, data).then((response) => {
+    axios.post(`${process.env.REACT_APP_SERVER_URL}/send_to_server`, data).then((response) => {
       // handle success
       console.log("the axios api response", response);
       setMessage(response.data.message)
