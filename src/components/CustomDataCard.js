@@ -119,13 +119,14 @@ export default function StickyHeadTable(props) {
                                     <TableCell >
                                         {row.SaleDateTime.split("-")[2].slice(0, 2)}&nbsp;
                                         {monthNames[parseInt(row.SaleDateTime.split("-")[1], 10) - 1]}&nbsp;&nbsp;
+                                        {row.SaleDateTime.split("-")[0]
+
+                                        },&nbsp;
                                         {row.SaleDateTime.split("T")[1].slice(0, 8)
 
 
                                         } &nbsp;
-                                        {row.SaleDateTime.split("-")[0]
-
-                                        }&nbsp;
+                                        
 
 
 
