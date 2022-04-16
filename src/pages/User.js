@@ -63,7 +63,14 @@ export default function User() {
     axios(options).then(function (response) {
       // handle success
       console.log("the axios api response", response.data.total_sales.Sales);
-      setTodaySales(response.data.total_sales.Sales)
+      console.log(endDate.split("T")[1])
+      response.data.total_sales.Sales.forEach((data)=>{
+
+        if(data.SaleTime<=endDate.split("T")[1])
+        {todaySales.push(data)}
+        
+      })
+      setTodaySales(todaySales)
       countSales(response.data.total_sales.Sales)
       setTimeout(handleSpinnerClose(), 3000);
 
