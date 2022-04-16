@@ -149,11 +149,6 @@ export default function User() {
     currentMonth="0"+currentMonth
     var currentDate=parseInt(startDate.getDate())<=9 &&String(startDate.getDate()).slice(0,1)!='0'?"0"+String(startDate.getDate()):String(startDate.getDate())
   
-
-    
-
-
-
     endDate = moment().tz("Asia/Singapore").format().split("+")[0]
     if(currentDate===endDate.split("-")[2].split("T")[0])
     {console.log("Yes")
