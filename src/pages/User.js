@@ -253,6 +253,7 @@ export default function User() {
                   label="Date desktop"
                   inputFormat="MM/dd/yyyy"
                   value={startDate}
+                  maxDate={new Date()} 
                   onChange={handleChange}
                   renderInput={(params) => <TextField {...params} />}
                 />
