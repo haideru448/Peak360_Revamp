@@ -29,6 +29,10 @@ const SORT_OPTIONS = [
 export default function Blog() {
   const [currentClientId, setcurrentClientId] = React.useState(-1);
   const [textFieldState, setTextFieldState] = React.useState(true);
+  const [ftpCredentialsState, setFtpCredentialsState] = React.useState({ip:true,password:true});
+  const [ftpConfigurations, setFtpConfigurations] = React.useState({ip:"",password:""});
+
+
   const [clientId, setclientId] = React.useState("");
   const [value, setValue] = React.useState(new Date('2014-08-18T21:11:54'));
   const [value2, setValue2] = React.useState(new Date('2014-08-18T21:11:54'));
@@ -121,6 +125,23 @@ export default function Blog() {
         </Typography><br /><br />
 
         <center><TextField disabled={textFieldState} type="number" style={{ "width": "40%" }} id="standard-basic" label="Enter Client Id" variant="filled" value={clientId} onChange={clientValueId} /><br /><br /><br />
+        <Box sx={{display:"flex",alignItems:"center"}}>  <Button sx={{marginLeft:"auto"}}  variant="contained" onClick={saveClientId}>Save</Button><br /><br /><br />
+         &nbsp;&nbsp;&nbsp; <Button sx={{marginRight:"auto"}} variant="contained" onClick={()=>{setTextFieldState(false)
+        console.log(textFieldState)
+        
+        }}>Edit</Button></Box>
+        <Toaster
+  position="top-center"
+  reverseOrder={false}
+/>
+
+        </center>
+       
+
+        <center><TextField disabled={ftpCredentialsState.ip} type="text" style={{ "width": "40%" }} id="standard-basic" label="FTP IP" variant="filled" value={ftpConfigurations.ip}  /><br /><br />
+        <TextField disabled={ftpCredentialsState.password} type="password" style={{ "width": "40%" }} id="standard-basic" label="FTP PASSWORD" variant="filled" value={ftpConfigurations.password} />
+        
+        <br /><br />
         <Box sx={{display:"flex",alignItems:"center"}}>  <Button sx={{marginLeft:"auto"}}  variant="contained" onClick={saveClientId}>Save</Button><br /><br /><br />
          &nbsp;&nbsp;&nbsp; <Button sx={{marginRight:"auto"}} variant="contained" onClick={()=>{setTextFieldState(false)
         console.log(textFieldState)
