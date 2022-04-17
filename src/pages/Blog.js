@@ -141,9 +141,9 @@ export default function Blog() {
         </center>
        
 
-        <center><TextField disabled={ftpCredentialsState} type="text" style={{ "width": "40%" }} id="standard-basic" label="FTP IP" variant="filled" value={ftpConfigurations.ip}  /><br /><br />
-        <TextField disabled={ftpCredentialsState} type="text" style={{ "width": "40%" }} id="standard-basic" label="FTP Username" variant="filled" value={ftpConfigurations.userName} /><br /><br />
-        <TextField disabled={ftpCredentialsState} type="password" style={{ "width": "40%" }} id="standard-basic" label="FTP PASSWORD" variant="filled" value={ftpConfigurations.password} />
+        <center><TextField disabled={ftpCredentialsState} type="text" style={{ "width": "40%" }} name="ip" id="standard-basic" label="FTP IP" variant="filled" value={ftpConfigurations.ip}  /><br /><br />
+        <TextField disabled={ftpCredentialsState} type="text" style={{ "width": "40%" }} name="userName" id="standard-basic" label="FTP Username" variant="filled" value={ftpConfigurations.userName} /><br /><br />
+        <TextField disabled={ftpCredentialsState} type="password" style={{ "width": "40%" }} name="password" id="standard-basic" label="FTP PASSWORD" variant="filled" value={ftpConfigurations.password} />
 
         
         <br /><br />

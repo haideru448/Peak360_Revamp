@@ -65,7 +65,7 @@ export default function User() {
       console.log(endDate.split("T")[1])
       setSalesData(response.data.total_sales.Sales,endDate)
       
-      countSales(response.data.total_sales.Sales)
+      
       setTimeout(handleSpinnerClose(), 3000);
 
     }).catch((err) => {
@@ -80,7 +80,8 @@ export default function User() {
   }, []);
 
   function setSalesData(salesData,endDate)
-  {
+  {todaySales=[]
+    setTodaySales(todaySales)
     salesData.forEach((data)=>{
 
       if(data.SaleTime<=endDate.split("T")[1])
@@ -88,6 +89,7 @@ export default function User() {
       
     })
     setTodaySales(todaySales)
+    countSales(todaySales)
 
   }
 
@@ -174,7 +176,7 @@ export default function User() {
       // handle success
       console.log("the axios api response", response.data.total_sales.Sales);
       setSalesData(response.data.total_sales.Sales,`${startDate.getFullYear()}-${currentMonth}-${currentDate}${endDateTime}`)
-      countSales(response.data.total_sales.Sales)
+      
       handleSpinnerClose()
 
     }).catch((err) => {

@@ -11,6 +11,7 @@ import _ from "lodash"
 
 let dt;
 let PaymentAmount;
+let purchasedItems;
 let payments;
 const monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
@@ -96,7 +97,15 @@ export default function StickyHeadTable(props) {
                                 <TableRow hover role="checkbox" tabIndex={-1} key={row.Id}>
                                     <TableCell>
                                     <span style={{display:"none"}}>{PaymentAmount=0}</span>
-                                        {row.Payments[0].Type}
+                                    <span style={{display:"none"}}>{purchasedItems=""}</span>
+
+                                        
+                                        {
+                                        row.PurchasedItems.forEach((purchased)=>
+                                        {purchasedItems+=purchased.Description}
+                                        )
+                                        }
+                                        {purchasedItems}
 
                                     </TableCell>
                                     <TableCell >
