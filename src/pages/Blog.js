@@ -29,8 +29,8 @@ const SORT_OPTIONS = [
 export default function Blog() {
   const [currentClientId, setcurrentClientId] = React.useState(-1);
   const [textFieldState, setTextFieldState] = React.useState(true);
-  const [ftpCredentialsState, setFtpCredentialsState] = React.useState({ip:true,password:true});
-  const [ftpConfigurations, setFtpConfigurations] = React.useState({ip:"",password:""});
+  const [ftpCredentialsState, setFtpCredentialsState] = React.useState(true);
+  const [ftpConfigurations, setFtpConfigurations] = React.useState({ip:"",password:"",userName:""});
 
 
   const [clientId, setclientId] = React.useState("");
@@ -79,6 +79,9 @@ export default function Blog() {
   const handleChange2 = (newValue) => {
     setValue2(newValue);
   };
+  function enableFTPCredentialsField()
+  {setFtpCredentialsState(false)
+  }
 
 
 
@@ -138,12 +141,14 @@ export default function Blog() {
         </center>
        
 
-        <center><TextField disabled={ftpCredentialsState.ip} type="text" style={{ "width": "40%" }} id="standard-basic" label="FTP IP" variant="filled" value={ftpConfigurations.ip}  /><br /><br />
-        <TextField disabled={ftpCredentialsState.password} type="password" style={{ "width": "40%" }} id="standard-basic" label="FTP PASSWORD" variant="filled" value={ftpConfigurations.password} />
+        <center><TextField disabled={ftpCredentialsState} type="text" style={{ "width": "40%" }} id="standard-basic" label="FTP IP" variant="filled" value={ftpConfigurations.ip}  /><br /><br />
+        <TextField disabled={ftpCredentialsState} type="text" style={{ "width": "40%" }} id="standard-basic" label="FTP Username" variant="filled" value={ftpConfigurations.userName} /><br /><br />
+        <TextField disabled={ftpCredentialsState} type="password" style={{ "width": "40%" }} id="standard-basic" label="FTP PASSWORD" variant="filled" value={ftpConfigurations.password} />
+
         
         <br /><br />
         <Box sx={{display:"flex",alignItems:"center"}}>  <Button sx={{marginLeft:"auto"}}  variant="contained" >Save</Button><br /><br /><br />
-         &nbsp;&nbsp;&nbsp; <Button sx={{marginRight:"auto"}} variant="contained">Edit</Button></Box>
+         &nbsp;&nbsp;&nbsp; <Button sx={{marginRight:"auto"}} variant="contained" onClick={()=>{enableFTPCredentialsField()}}>Edit</Button></Box>
         <Toaster
   position="top-center"
   reverseOrder={false}
