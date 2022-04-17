@@ -63,13 +63,8 @@ export default function User() {
       // handle success
       console.log("the axios api response", response.data.total_sales.Sales);
       console.log(endDate.split("T")[1])
-      response.data.total_sales.Sales.forEach((data)=>{
-
-        if(data.SaleTime<=endDate.split("T")[1])
-        {todaySales.push(data)}
-        
-      })
-      setTodaySales(todaySales)
+      setSalesData(response.data.total_sales.Sales,endDate)
+      
       countSales(response.data.total_sales.Sales)
       setTimeout(handleSpinnerClose(), 3000);
 
@@ -83,6 +78,18 @@ export default function User() {
 
 
   }, []);
+
+  function setSalesData(salesData,endDate)
+  {
+    salesData.forEach((data)=>{
+
+      if(data.SaleTime<=endDate.split("T")[1])
+      {todaySales.push(data)}
+      
+    })
+    setTodaySales(todaySales)
+
+  }
 
   function countSales(Sales) {
     var totalSales=0;
@@ -166,7 +173,7 @@ export default function User() {
     axios(options).then(function (response) {
       // handle success
       console.log("the axios api response", response.data.total_sales.Sales);
-      setTodaySales(response.data.total_sales.Sales)
+      setSalesData(response.data.total_sales.Sales,`${startDate.getFullYear()}-${currentMonth}-${currentDate}${endDateTime}`)
       countSales(response.data.total_sales.Sales)
       handleSpinnerClose()
 
