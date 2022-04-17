@@ -142,11 +142,8 @@ export default function Blog() {
         <TextField disabled={ftpCredentialsState.password} type="password" style={{ "width": "40%" }} id="standard-basic" label="FTP PASSWORD" variant="filled" value={ftpConfigurations.password} />
         
         <br /><br />
-        <Box sx={{display:"flex",alignItems:"center"}}>  <Button sx={{marginLeft:"auto"}}  variant="contained" onClick={saveClientId}>Save</Button><br /><br /><br />
-         &nbsp;&nbsp;&nbsp; <Button sx={{marginRight:"auto"}} variant="contained" onClick={()=>{setTextFieldState(false)
-        console.log(textFieldState)
-        
-        }}>Edit</Button></Box>
+        <Box sx={{display:"flex",alignItems:"center"}}>  <Button sx={{marginLeft:"auto"}}  variant="contained" >Save</Button><br /><br /><br />
+         &nbsp;&nbsp;&nbsp; <Button sx={{marginRight:"auto"}} variant="contained">Edit</Button></Box>
         <Toaster
   position="top-center"
   reverseOrder={false}
