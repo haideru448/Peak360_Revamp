@@ -247,6 +247,9 @@ export default function User() {
     const myTimeout = setTimeout(() => { handleClose() }, 3000);
   }).catch((err) => {
     console.error("Due to some Error request failed: ", err);
+    setMessage(err.data.message)
+    handleClick()
+    const myTimeout = setTimeout(() => { handleClose() }, 3000);
   });
 
 }
