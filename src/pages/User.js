@@ -233,6 +233,23 @@ export default function User() {
     });
   }
 
+  function sendToFtp()
+  {console.log("in the ftp function")
+  var year =  String(startDate.getFullYear())
+  var month =  "0"+String((startDate.getMonth() + 1))
+  var day = parseInt(startDate.getDate())<=9 &&String(startDate.getDate()).slice(0,1)!='0'?"0"+String(startDate.getDate()):String(startDate.getDate())
+  var data = { date: `${year}-${month}-${day}` }
+  axios.post(`${process.env.REACT_APP_SERVER_URL}/send_to_ftp`, data).then((response) => {
+    // handle success
+    console.log("the axios api response", response);
+    setMessage(response.data.message)
+    handleClick()
+    const myTimeout = setTimeout(() => { handleClose() }, 3000);
+  }).catch((err) => {
+    console.error("Due to some Error request failed: ", err);
+  });
+
+}
 
 
   return (<div>
@@ -285,7 +302,8 @@ export default function User() {
     <br></br>
     <br></br>
 
-    <center><Tooltip title="To download a .txt file based on the date selected" arrow><Button variant="contained" onClick={downloadTxtFile}>Download </Button></Tooltip> <Tooltip title="To send the same .txt file to your server, based on the date selected" arrow><Button variant="contained" onClick={SendToServer}>Send</Button></Tooltip></center>
+    <center><Tooltip title="To download a .txt file based on the date selected" arrow><Button variant="contained" onClick={downloadTxtFile}>Download </Button></Tooltip> <Tooltip title="To send the same .txt file to your server, based on the date selected" arrow><Button variant="contained" onClick={sendToFtp}>Send
+    </Button></Tooltip></center>
     <br></br>
     <MuiDataCard salesData={todaySales} />
   </div>
