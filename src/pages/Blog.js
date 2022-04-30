@@ -190,7 +190,7 @@ function getFTPCredentials()
 
   }
   return (
-    <Page title="Dashboard: Blog | Minimal-UI">
+    <Page title="Dashboard: Interactive | Peak360">
       <Container>
 
         <Typography variant="h4" gutterBottom>

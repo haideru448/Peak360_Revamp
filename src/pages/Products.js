@@ -71,7 +71,7 @@ export default function EcommerceShop() {
   };
 
   return (
-    <Page title="Dashboard: Products | Minimal-UI">
+    <Page title="Dashboard: Products | Peak360">
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
           Archives Record

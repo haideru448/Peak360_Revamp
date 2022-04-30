@@ -224,12 +224,14 @@ export default function User() {
   var data = { file: "TD_" + String(year) + String(month) + String(day), file_content: `${clientId}`, date: `${year}-${month}-${day}` }
     axios.post(`${process.env.REACT_APP_SERVER_URL}/send_to_server`, data).then((response) => {
       // handle success
-      console.log("the axios api response", response);
-      setMessage(response.data.message)
-      handleClick()
-      const myTimeout = setTimeout(() => { handleClose() }, 3000);
+     
     }).catch((err) => {
       console.error("Due to some Error request failed: ", err);
+
+      console.log("the axios api response", err);
+      setMessage(err.data.message)
+      handleClick()
+      const myTimeout = setTimeout(() => { handleClose() }, 3000);
     });
   }
 
@@ -239,7 +241,7 @@ export default function User() {
   var month =  "0"+String((startDate.getMonth() + 1))
   var day = parseInt(startDate.getDate())<=9 &&String(startDate.getDate()).slice(0,1)!='0'?"0"+String(startDate.getDate()):String(startDate.getDate())
   var data = { date: `${year}-${month}-${day}` }
-  axios.post(`${process.env.REACT_APP_SERVER_URL}/send_to_ftp`, data).then((response) => {
+  axios.post(`https://49e1-119-160-99-193.ngrok.io/send_to_ftp`, data).then((response) => {
     // handle success
     console.log("the axios api response", response);
     setMessage(response.data.message)
