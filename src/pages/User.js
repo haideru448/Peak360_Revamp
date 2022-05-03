@@ -211,7 +211,8 @@ export default function User() {
 
   function retrieveStartDate() {
 
-    return startDate.getFullYear() + "-" + (startDate.getMonth() + 1) + '-' + startDate.getDate();
+
+     return (startDate.getMonth() + 1)+'-' + startDate.getDate()+'-'+startDate.getFullYear()
   }
 
   
@@ -238,7 +239,7 @@ export default function User() {
   function sendToFtp()
   {console.log("in the ftp function")
   var year =  String(startDate.getFullYear())
-  var month =  "0"+String((startDate.getMonth() + 1))
+  var month = parseInt(startDate.getMonth() + 1)<=9 ?"0"+String((startDate.getMonth() + 1)):String((startDate.getMonth() + 1))
   var day = parseInt(startDate.getDate())<=9 &&String(startDate.getDate()).slice(0,1)!='0'?"0"+String(startDate.getDate()):String(startDate.getDate())
   var data = { date: `${year}-${month}-${day}` }
   axios.post(`${process.env.REACT_APP_SERVER_URL}/send_to_ftp`, data).then((response) => {
