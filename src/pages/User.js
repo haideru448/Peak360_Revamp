@@ -123,7 +123,7 @@ export default function User() {
       element.download = response.data.file_name;
       document.body.appendChild(element); // Required for this to work in FireFox
       element.click();
-      setMessage("Downloading Files ....")
+      setMessage("Downloading Files..")
 
     }).catch((err) => {
       console.error("Due to some Error request failed: ", err);
@@ -308,7 +308,7 @@ export default function User() {
     <br></br>
     <br></br>
 
-    <center><Tooltip title="To download a .txt file based on the date selected" arrow><Button variant="contained" onClick={downloadTxtFile}>Download </Button></Tooltip> <Tooltip title="To send the same .txt file to your server, based on the date selected" arrow><Button variant="contained" onClick={sendToFtp}>Send
+    <center><Tooltip title="To download a .txt file based on the date selected" arrow><Button variant="contained" onClick={downloadTxtFile}>Download </Button></Tooltip> <Tooltip title="To send a consolidated .txt file to landlord server, based on date selected" arrow><Button variant="contained" onClick={sendToFtp}>Send
     </Button></Tooltip></center>
     <br></br>
     <MuiDataCard salesData={todaySales} />

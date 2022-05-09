@@ -229,7 +229,7 @@ function getFTPCredentials()
           error={Boolean(touched.password && errors.password)}
           helperText={touched.password && errors.password}
         
-        disabled={ftpCredentialsState} type="password" style={{ "width": "40%" }} name="password" id="standard-basic" label="FTP PASSWORD" variant="filled"  /><br /><br />
+        disabled={ftpCredentialsState} type="password" style={{ "width": "40%" }} name="password" id="standard-basic" label="FTP Password" variant="filled"  /><br /><br />
           <TextField
         {...getFieldProps('port')}
         error={Boolean(touched.port && errors.port)}
