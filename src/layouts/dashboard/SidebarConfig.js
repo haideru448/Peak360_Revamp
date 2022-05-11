@@ -13,7 +13,7 @@ const sidebarConfig = [
   }, */
   {
     title: 'Interactive',
-    path: '/dashboard/user',
+    path: '/dashboard/sales',
     icon: getIcon('eva:people-fill')
   },
  /* {
@@ -23,7 +23,7 @@ const sidebarConfig = [
   }, */
   {
     title: 'Settings',
-    path: '/dashboard/blog',
+    path: '/dashboard/settings',
     icon: getIcon('eva:file-text-fill')
   }
 ];

@@ -10,6 +10,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import moment from "moment-timezone"
 import Tooltip from '@mui/material/Tooltip';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import DashboardLayout from 'src/layouts/dashboard';
 
 
 
@@ -112,18 +113,24 @@ export default function User() {
     var data = { file: `TD_${String(year)}0${String(month)}${String(day)}`, file_content: `${clientId}`, date: `${year}-${month}-${day}` }
 
     axios.post(`${process.env.REACT_APP_SERVER_URL}/sales_data`, data).then((response) => {
+
       // handle success
       console.log("the axios api response", response);
-      setMessage(response.data.message)
+      setMessage("Downloading File..")
+
       handleClick()
-      const myTimeout = setTimeout(() => { handleClose() }, 3000);
+      let myTimeout = setTimeout(() => { handleClose() }, 1000);
       let element = document.createElement("a");
       let file = new Blob([`${response.data.file_content}`], { type: 'text/plain' });
       element.href = URL.createObjectURL(file);
       element.download = response.data.file_name;
       document.body.appendChild(element); // Required for this to work in FireFox
       element.click();
-      setMessage("Downloading Files..")
+      setMessage("File Downloaded..")
+       myTimeout = setTimeout(() => { handleClose() }, 3000);
+
+
+      
 
     }).catch((err) => {
       console.error("Due to some Error request failed: ", err);
@@ -259,6 +266,7 @@ export default function User() {
 
 
   return (<div>
+    
     <Snackbar
       open={open}
       autoHideDuration={6000}
