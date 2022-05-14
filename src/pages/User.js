@@ -53,7 +53,7 @@ export default function User() {
   useEffect(() => {
     handleSpinnerToggle()
     endDate = moment().tz("Asia/Singapore").format().split("+")[0]
-    console.log(process.env.REACT_APP_SERVER_URL)
+    
 
     let options = {
       method: "get",
@@ -62,7 +62,7 @@ export default function User() {
     };
     axios(options).then(function (response) {
       // handle success
-      console.log("the axios api response", response.data.total_sales.Sales);
+     
       console.log(endDate.split("T")[1])
       setSalesData(response.data.total_sales.Sales,endDate)
       
@@ -157,10 +157,7 @@ export default function User() {
   }
   function getDataOfParticularDate() {
     handleSpinnerToggle()
-    console.log("The start Date without converting to anything",startDate)
-    console.log(startDate.getMonth()+1)
-    console.log("The date",startDate.getDate())
-    console.log("The date",startDate.getFullYear())
+  
     var currentMonth=startDate.getMonth()+1
     currentMonth="0"+currentMonth
     var currentDate=parseInt(startDate.getDate())<=9 &&String(startDate.getDate()).slice(0,1)!='0'?"0"+String(startDate.getDate()):String(startDate.getDate())
@@ -181,7 +178,7 @@ export default function User() {
 
     axios(options).then(function (response) {
       // handle success
-      console.log("the axios api response", response.data.total_sales.Sales);
+
       setSalesData(response.data.total_sales.Sales,`${startDate.getFullYear()}-${currentMonth}-${currentDate}${endDateTime}`)
       
       handleSpinnerClose()
@@ -234,9 +231,7 @@ export default function User() {
       // handle success
      
     }).catch((err) => {
-      console.error("Due to some Error request failed: ", err);
 
-      console.log("the axios api response", err);
       setMessage(err.data.message)
       handleClick()
       const myTimeout = setTimeout(() => { handleClose() }, 3000);
@@ -244,19 +239,19 @@ export default function User() {
   }
 
   function sendToFtp()
-  {console.log("in the ftp function")
+  {
   var year =  String(startDate.getFullYear())
   var month = parseInt(startDate.getMonth() + 1)<=9 ?"0"+String((startDate.getMonth() + 1)):String((startDate.getMonth() + 1))
   var day = parseInt(startDate.getDate())<=9 &&String(startDate.getDate()).slice(0,1)!='0'?"0"+String(startDate.getDate()):String(startDate.getDate())
   var data = { date: `${year}-${month}-${day}` }
   axios.post(`${process.env.REACT_APP_SERVER_URL}/send_to_ftp`, data).then((response) => {
     // handle success
-    console.log("the axios api response", response);
+    
     setMessage(response.data.message)
     handleClick()
     const myTimeout = setTimeout(() => { handleClose() }, 3000);
   }).catch((err) => {
-    console.error("Due to some Error request failed: ", err);
+   
     setMessage(err.data.message)
     handleClick()
     const myTimeout = setTimeout(() => { handleClose() }, 3000);
