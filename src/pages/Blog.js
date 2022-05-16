@@ -195,7 +195,7 @@ function getFTPCredentials()
       <Container>
 
         <Typography variant="h4" gutterBottom>
-          LandLord Server Settings
+          Landlord Server Settings
         </Typography><br /><br />
 
         <center><TextField disabled={textFieldState} type="number" style={{ "width": "40%" }} id="standard-basic" label="Enter Client Id" variant="filled" value={clientId} onChange={clientValueId} /><br /><br /><br />

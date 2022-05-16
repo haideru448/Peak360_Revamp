@@ -12,7 +12,7 @@ const sidebarConfig = [
     icon: getIcon('eva:pie-chart-2-fill')
   }, */
   {
-    title: 'Interactive',
+    title: 'Sales',
     path: '/dashboard/sales',
     icon: getIcon('eva:people-fill')
   },
