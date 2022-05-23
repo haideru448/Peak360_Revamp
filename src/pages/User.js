@@ -110,6 +110,10 @@ export default function User() {
     var year = startDate.getFullYear()
     var month = (startDate.getMonth() + 1)
     var day = startDate.getDate();
+    if (month<10)
+    {month="0"+month}
+    
+
     var data = { file: `TD_${String(year)}0${String(month)}${String(day)}`, file_content: `${clientId}`, date: `${year}-${month}-${day}` }
 
     axios.post(`${process.env.REACT_APP_SERVER_URL}/sales_data`, data).then((response) => {
