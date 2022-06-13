@@ -16,11 +16,11 @@ const sidebarConfig = [
     path: '/dashboard/sales',
     icon: getIcon('eva:people-fill')
   },
- /* {
+ {
     title: 'Archive',
-    path: '/dashboard/products',
+    path: '/dashboard/intervals',
     icon: getIcon('eva:shopping-bag-fill')
-  }, */
+  },
   {
     title: 'Settings',
     path: '/dashboard/settings',
