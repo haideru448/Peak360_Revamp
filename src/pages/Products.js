@@ -52,7 +52,7 @@ export default function LocalizedTimePicker() {
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_SERVER_URL}/logs`).then((response) => {
       console.log(response.data);
-      setIntervalData(response.data.logs);
+      setIntervalData(response.data.logs.reverse());
     });
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}/add_interval`)
