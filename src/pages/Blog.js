@@ -50,10 +50,10 @@ export default function Blog() {
       const tField=true
       
       // handle success
-      console.log("the axios api response", response);
+      
       setclientId(response.data.client_id[0].client_id)
       setcurrentClientId(response.data.client_id[0].id)
-      console.log("The current client id is ", currentClientId)
+      
    
       getFTPCredentials()
 
@@ -91,7 +91,7 @@ export default function Blog() {
 
         axios.post(`${process.env.REACT_APP_SERVER_URL}/ftp_credentials`, data).then((response) => {
           // handle success
-          console.log("the axios api response", response);
+          
           toast.success(response.data.message)
           setTextFieldState(true)
   
@@ -100,11 +100,11 @@ export default function Blog() {
   
   
         });
-        console.log("the data is",data)
+        
       
-        console.log("hello")
+        
       } catch (err) {
-        console.log(err);
+        
         //
       }
     }
@@ -121,10 +121,10 @@ function getFTPCredentials()
   axios.get(`${process.env.REACT_APP_SERVER_URL}/ftp_credentials`).then((response) => {
   
     // handle success
-    console.log("the axios api response for credentials", response.data.credentials[0])
+    
     setFtpConfigurations(response.data.credentials[0])
     
-    console.log("sAVED IN STAT",ftpConfigurations)
+    
   
   }).catch((err) => {
     
@@ -134,7 +134,7 @@ function getFTPCredentials()
 } 
 
   function handleClick() {
-    console.log("in the handlee click")
+    
     setState({ open: true, vertical: 'top', horizontal: 'center', });
   };
 
@@ -164,7 +164,7 @@ function getFTPCredentials()
   }
   const saveClientId = () => {
     if (clientId.length < 12) {
-      console.log("client id lesser then 12 with length", clientId.length)
+      
       handleClick()
       setTimeout(() => { handleClose() }, 3000);
 
@@ -178,7 +178,7 @@ function getFTPCredentials()
 
       axios.post(`${process.env.REACT_APP_SERVER_URL}/client`, data).then((response) => {
         // handle success
-        console.log("the axios api response", response);
+        
         toast.success(response.data.message)
         setTextFieldState(true)
 
@@ -201,7 +201,7 @@ function getFTPCredentials()
         <center><TextField disabled={textFieldState} type="number" style={{ "width": "40%" }} id="standard-basic" label="Enter Client Id" variant="filled" value={clientId} onChange={clientValueId} /><br /><br /><br />
         <Box sx={{display:"flex",alignItems:"center"}}>  <Button sx={{marginLeft:"auto"}}  variant="contained" onClick={saveClientId}>Save</Button><br /><br /><br />
          &nbsp;&nbsp;&nbsp; <Button sx={{marginRight:"auto"}} variant="contained" onClick={()=>{setTextFieldState(false)
-        console.log(textFieldState)
+        
         
         }}>Edit</Button></Box>
         <Toaster

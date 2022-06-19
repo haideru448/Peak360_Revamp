@@ -34,7 +34,7 @@ export default function DashboardApp() {
     dateToIso = date.toISOString();
 
     endDate = dateToIso.split(".")[0]
-    console.log("The ending Date", endDate)
+    
     startDate = dateToIso.split("T")[0] + "T" + "00:00:00"
 
 
@@ -47,11 +47,11 @@ export default function DashboardApp() {
     };
     axios(options).then(function (response) {
       // handle success
-      console.log("the axios api response", response.data.total_sales.Sales);
+      
       setTodaySales(response.data.total_sales.Sales)
 
     }).catch((err) => {
-      console.log('Customer API error:', err);
+      
 
 
     });

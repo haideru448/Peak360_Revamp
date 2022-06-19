@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect } from 'react';
 import frLocale from 'date-fns/locale/fr';
 import ruLocale from 'date-fns/locale/ru';
@@ -22,8 +23,8 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import _ from 'lodash';
 import Tooltip from '@mui/material/Tooltip';
-import { Button, Typography,Box } from '@mui/material';
-import List from "../components/List"
+import { Button, Typography, Box } from '@mui/material';
+import List from '../components/List';
 
 const localeMap = {
   en: enLocale,
@@ -32,59 +33,93 @@ const localeMap = {
   ar: arSaLocale
 };
 
-
+let j = 0;
 
 export default function LocalizedTimePicker() {
   const [locale, setLocale] = React.useState('ru');
-  const [value, setValue] = React.useState([
+  let [value, setValue] = React.useState([
     new Date('2011-07-14 15:00'),
     new Date('2011-07-14 23:59'),
     new Date(),
     new Date(),
     new Date()
   ]);
-  const [intervalsData,setIntervalsData]=React.useState([])
+  const [disabledState, setDisabledState] = React.useState(true);
+  const [intervalsData, setIntervalsData] = React.useState([]);
 
-  const [intervalData, setIntervalData]=React.useState([])
-  
+  const [intervalData, setIntervalData] = React.useState([]);
+
   useEffect(() => {
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/logs`).then((response) => {
+      
+      setIntervalData(response.data.logs);
+    });
+    axios
+      .get(`${process.env.REACT_APP_SERVER_URL}/add_interval`)
+      .then((response) => {
+        
+        
 
-axios.get(`${process.env.REACT_APP_SERVER_URL}/logs`).then((response)=>{
-console.log(response.data)
-setIntervalData(response.data.logs)
+        setIntervalsData(response.data.intervals);
+        
+        if (response.data.intervals.length > 0) {
+          setIntervalTimes(response?.data.intervals.length, response?.data.intervals);
+        }
+      })
+      .catch((e) => {
+        toast.error('Please Try Again Later');
+        
+      });
 
-})
-axios
-.get(`${process.env.REACT_APP_SERVER_URL}/add_interval`)
-.then((response) => {
-console.log("interval data is",)
-console.log(response.data.intervals)
+    const setIntervalTimes = (intervalsLength, intervalsData) => {
+      
+      value = [];
 
-setIntervalsData(response.data.intervals)
+      setValue(value);
+      
+      for (j = 0; j < intervalsLength; j += 1) {
+        
 
-})
-.catch((e) => {
-  toast.error('Please Try Again Later');
-  console.log("in except",e)
-});
+        value.push(new Date(`2011-07-14 ${intervalsData[j]}`));
+      }
+      setValue(value);
+      setNoOfIntervals(intervalsLength)
+      
+    };
+  }, []);
 
-  }, [value]);
 
-  const [noOfIntervals, setNoOfIntervals] = React.useState(3);
+
+  const getIntervalData = (params) => {
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/logs`).then((response) => {
+      
+      setIntervalData(response.data.logs);
+    });
+    
+    
+  }
+
+  let [noOfIntervals, setNoOfIntervals] = React.useState(3);
   const [noOfChange, setNoOfChange] = React.useState(0);
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [intervalsArray, setIntervalsArray] = React.useState('');
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
+
   const sendIntervals = () => {
     const filteredArray = [];
-    console.log(value);
+    
     let i = 0;
     for (i = 0; i < noOfIntervals; i += 1) {
-      console.log(value[i].getHours());
+      
+     if(value[i]===null || value[i]==='' || value[i]===undefined  )
+     {continue} 
+      
+
       filteredArray.push(
         `${value[i].getHours() < 10 ? `0${value[i].getHours()}` : value[i].getHours()}:${
           value[i].getMinutes() < 10 ? `0${value[i].getMinutes()}` : value[i].getMinutes()
@@ -96,7 +131,10 @@ setIntervalsData(response.data.intervals)
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/add_interval`, data)
       .then((response) => {
+        
         toast.success('Intervals Added');
+        
+        getIntervalData()
       })
       .catch(() => {
         toast.error('Please Try Again Later');
@@ -108,11 +146,11 @@ setIntervalsData(response.data.intervals)
     setPage(0);
   };
 
-  const changeTime = (newValue,index) => {
+  const changeTime = (newValue, index) => {
     value[index] = newValue;
-                    console.log(value[index]);
-                    setValue(value);
-  }
+    
+    setValue(value);
+  };
 
   const selectLocale = (newLocale) => {
     setLocale(newLocale);
@@ -122,32 +160,34 @@ setIntervalsData(response.data.intervals)
     <>
       <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={localeMap[locale]}>
         <div>
-        <center>
-     
-          
+        <Toaster
+  position="top-center"
+  reverseOrder={false}
+/>
+          <center>
             {_.times(noOfIntervals, (index) => (
               <>
                 <TimePicker
                   value={value[index]}
                   onChange={(newValue) => {
-                    changeTime(newValue,index)
-                    setNoOfChange(noOfChange + 1)
+                    changeTime(newValue, index);
+                    setNoOfChange(noOfChange + 1);
+
                     
-                    
-                   
-                    console.log('setting interval');
                   }}
-                  renderInput={(params) => <TextField {...params} />}
+                  disabled={disabledState}
+                  renderInput={(params) => <TextField {...params} disabled={disabledState} />}
                 />
                 <br /> <br />
               </>
             ))}
-       
             <Tooltip title="Click Here to Insert more Intervals . 5(max)" arrow>
               <Button
                 variant="contained"
                 onClick={() => {
-                  if (noOfIntervals !== 5) setNoOfIntervals(noOfIntervals + 1);
+                  if (noOfIntervals !== 5){
+                    setNoOfIntervals(noOfIntervals + 1)
+                  } ;
                 }}
               >
                 +{' '}
@@ -164,17 +204,15 @@ setIntervalsData(response.data.intervals)
               Save
             </Button>
             &nbsp;&nbsp;&nbsp;
-            <Button variant="contained">Edit </Button>
-         <Box sx={{mt:'50px',mb:'50px'}}>    
-         <Typography
-             variant="h4"
-             sx={{mb:'20px'}}
-              >
-                Current Intervals
+            <Button
+              variant="contained"
+              onClick={() => {
                 
-              </Typography>
-        {intervalsData?.map((data,index)=> ( <List interval={data} index={index}/>))}
-        </Box>
+                setDisabledState(false);
+              }}
+            >
+              Edit{' '}
+            </Button>
           </center>
         </div>
       </LocalizationProvider>

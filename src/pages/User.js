@@ -63,14 +63,14 @@ export default function User() {
     axios(options).then(function (response) {
       // handle success
      
-      console.log(endDate.split("T")[1])
+      
       setSalesData(response.data.total_sales.Sales,endDate)
       
       
       setTimeout(handleSpinnerClose(), 3000);
 
     }).catch((err) => {
-      console.log('Customer API error:', err);
+      
 
 
     });
@@ -106,7 +106,7 @@ export default function User() {
   }
 
   function downloadTxtFile() {
-    console.log("The start date is", startDate)
+    
     var year = startDate.getFullYear()
     var month = (startDate.getMonth() + 1)
     var day = startDate.getDate();
@@ -121,7 +121,7 @@ export default function User() {
     axios.post(`${process.env.REACT_APP_SERVER_URL}/sales_data`, data).then((response) => {
 
       // handle success
-      console.log("the axios api response", response);
+      
       setMessage("Downloading File..")
 
       handleClick()
@@ -149,7 +149,7 @@ export default function User() {
   function getClientId() {
     axios.get(`${process.env.REACT_APP_SERVER_URL}/client`).then((response) => {
       // handle success
-      console.log("the client id isresponse", response);
+      
       setClientId(response.data.client_id[0].client_id)
 
 
@@ -170,7 +170,7 @@ export default function User() {
   
     endDate = moment().tz("Asia/Singapore").format().split("+")[0]
     if(currentDate===endDate.split("-")[2].split("T")[0])
-    {console.log("Yes")
+    {
     endDateTime=endDate.split("T")[1]
     endDateTime="T"+endDateTime
   }
@@ -210,7 +210,7 @@ export default function User() {
   };
 
   const handleChange = (newValue) => {
-    console.log("the new valuee", newValue)
+    
   
     startDate = newValue
     setStartDate(startDate);
