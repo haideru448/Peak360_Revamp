@@ -21,7 +21,7 @@ export default function Router() {
       children: [
         { path: 'app', element: <DashboardApp /> },
         { path: 'sales', element: <User /> },
-        { path: 'intervals', element: <Products /> },
+        { path: 'scheduler', element: <Products /> },
         { path: 'settings', element: <Blog /> }
       ]
     },

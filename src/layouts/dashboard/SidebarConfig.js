@@ -17,8 +17,8 @@ const sidebarConfig = [
     icon: getIcon('eva:people-fill')
   },
  {
-    title: 'Archive',
-    path: '/dashboard/intervals',
+    title: 'Scheduler',
+    path: '/dashboard/scheduler',
     icon: getIcon('eva:shopping-bag-fill')
   },
   {
