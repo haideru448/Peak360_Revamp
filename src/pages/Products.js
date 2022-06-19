@@ -51,40 +51,40 @@ export default function LocalizedTimePicker() {
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_SERVER_URL}/logs`).then((response) => {
-      
+      console.log(response.data);
       setIntervalData(response.data.logs);
     });
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}/add_interval`)
       .then((response) => {
-        
-        
+        console.log('interval data is');
+        console.log(response.data.intervals);
 
         setIntervalsData(response.data.intervals);
-        
+        console.log('the length of inttervals data is', response.data.intervals.length);
         if (response.data.intervals.length > 0) {
           setIntervalTimes(response?.data.intervals.length, response?.data.intervals);
         }
       })
       .catch((e) => {
         toast.error('Please Try Again Later');
-        
+        console.log('in except', e);
       });
 
     const setIntervalTimes = (intervalsLength, intervalsData) => {
-      
+      console.log('to set interval times in the loop');
       value = [];
 
       setValue(value);
-      
+      console.log('the intervals data', intervalsData);
       for (j = 0; j < intervalsLength; j += 1) {
-        
+        console.log('hello');
 
         value.push(new Date(`2011-07-14 ${intervalsData[j]}`));
       }
       setValue(value);
       setNoOfIntervals(intervalsLength)
-      
+      console.log('the value is', value);
     };
   }, []);
 
@@ -92,7 +92,7 @@ export default function LocalizedTimePicker() {
 
   const getIntervalData = (params) => {
     axios.get(`${process.env.REACT_APP_SERVER_URL}/logs`).then((response) => {
-      
+      console.log(response.data);
       setIntervalData(response.data.logs);
     });
     
@@ -112,13 +112,13 @@ export default function LocalizedTimePicker() {
 
   const sendIntervals = () => {
     const filteredArray = [];
-    
+    console.log(value);
     let i = 0;
     for (i = 0; i < noOfIntervals; i += 1) {
-      
+      console.log("the value of i",value[i])
      if(value[i]===null || value[i]==='' || value[i]===undefined  )
      {continue} 
-      
+      console.log(value[i].getHours());
 
       filteredArray.push(
         `${value[i].getHours() < 10 ? `0${value[i].getHours()}` : value[i].getHours()}:${
@@ -131,7 +131,7 @@ export default function LocalizedTimePicker() {
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/add_interval`, data)
       .then((response) => {
-        
+        console.log("in the add intervals succesd")
         toast.success('Intervals Added');
         
         getIntervalData()
@@ -148,7 +148,7 @@ export default function LocalizedTimePicker() {
 
   const changeTime = (newValue, index) => {
     value[index] = newValue;
-    
+    console.log(value[index]);
     setValue(value);
   };
 
@@ -173,7 +173,7 @@ export default function LocalizedTimePicker() {
                     changeTime(newValue, index);
                     setNoOfChange(noOfChange + 1);
 
-                    
+                    console.log('setting interval');
                   }}
                   disabled={disabledState}
                   renderInput={(params) => <TextField {...params} disabled={disabledState} />}
@@ -207,7 +207,7 @@ export default function LocalizedTimePicker() {
             <Button
               variant="contained"
               onClick={() => {
-                
+                console.log('the disabled state now is ', disabledState);
                 setDisabledState(false);
               }}
             >
