@@ -55,7 +55,7 @@ export default function LocalizedTimePicker() {
   const [intervalData, setIntervalData] = React.useState([]);
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_SERVER_URL}/logs`).then((response) => {
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/logs`,{headers}).then((response) => {
       console.log(response.data);
       setIntervalData(response.data.logs.reverse());
     });
