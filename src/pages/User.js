@@ -37,6 +37,10 @@ let endDate;
 let endDateTime;
 let i=0;
 let j=0;
+const headers = {
+  'Authorization':process.env.REACT_APP_API_KEY
+}
+
 // ----------------------------------------------------------------------
 
 
@@ -58,7 +62,7 @@ export default function User() {
     let options = {
       method: "get",
       url: `${process.env.REACT_APP_SERVER_URL}/sales?start_date=${endDate.split("T")[0]}T00:00:00&end_date=${endDate.split("+")[0]}`,
-
+      headers:headers
     };
     axios(options).then(function (response) {
       // handle success
@@ -118,7 +122,7 @@ export default function User() {
 
     var data = { file: `TD_${String(year)}${String(month)}${String(day)}`, file_content: `${clientId}`, date: `${year}-${month}-${day}` }
 
-    axios.post(`${process.env.REACT_APP_SERVER_URL}/sales_data`, data).then((response) => {
+    axios.post(`${process.env.REACT_APP_SERVER_URL}/sales_data`, data,{headers}).then((response) => {
 
       // handle success
       
@@ -147,7 +151,7 @@ export default function User() {
 
   }
   function getClientId() {
-    axios.get(`${process.env.REACT_APP_SERVER_URL}/client`).then((response) => {
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/client`,{headers}).then((response) => {
       // handle success
       
       setClientId(response.data.client_id[0].client_id)
@@ -180,6 +184,7 @@ export default function User() {
     let options = {
       method: "get",     
       url: `${process.env.REACT_APP_SERVER_URL}/sales?start_date=${startDate.getFullYear()}-${currentMonth}-${currentDate}T00:00:00&end_date=${startDate.getFullYear()}-${currentMonth}-${currentDate}${endDateTime}`,
+    headers:headers
     };
 
     axios(options).then(function (response) {
@@ -233,7 +238,7 @@ export default function User() {
     var day = parseInt(startDate.getDate())<=9 &&String(startDate.getDate()).slice(0,1)!='0'?"0"+String(startDate.getDate()):String(startDate.getDate())
 
   var data = { file: "TD_" + String(year) + String(month) + String(day), file_content: `${clientId}`, date: `${year}-${month}-${day}` }
-    axios.post(`${process.env.REACT_APP_SERVER_URL}/send_to_server`, data).then((response) => {
+    axios.post(`${process.env.REACT_APP_SERVER_URL}/send_to_server`, data,{headers}).then((response) => {
       // handle success
      
     }).catch((err) => {
@@ -250,7 +255,7 @@ export default function User() {
   var month = parseInt(startDate.getMonth() + 1)<=9 ?"0"+String((startDate.getMonth() + 1)):String((startDate.getMonth() + 1))
   var day = parseInt(startDate.getDate())<=9 &&String(startDate.getDate()).slice(0,1)!='0'?"0"+String(startDate.getDate()):String(startDate.getDate())
   var data = { date: `${year}-${month}-${day}` }
-  axios.post(`${process.env.REACT_APP_SERVER_URL}/send_to_ftp`, data).then((response) => {
+  axios.post(`${process.env.REACT_APP_SERVER_URL}/send_to_ftp`, data,{headers}).then((response) => {
     // handle success
     
     setMessage(response.data.message)

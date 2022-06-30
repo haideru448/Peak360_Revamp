@@ -25,6 +25,11 @@ let dateToIso;
 let date;
 let endDate;
 let startDate
+
+const headers = {
+  'Authorization':process.env.REACT_APP_API_KEY
+}
+
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
@@ -42,7 +47,8 @@ export default function DashboardApp() {
       method: "get",
 
 
-      url: "https://api-dev.peak360.fitness/sales?start_date=" + startDate + "&end_date=" + endDate,
+      url: process.env.REACT_APP_SERVER_URL+"/sales?start_date=" + startDate + "&end_date=" + endDate,
+      headers:headers
 
     };
     axios(options).then(function (response) {

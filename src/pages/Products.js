@@ -35,6 +35,11 @@ const localeMap = {
 
 let j = 0;
 
+const headers = {
+  'Authorization':process.env.REACT_APP_API_KEY
+}
+
+
 export default function LocalizedTimePicker() {
   const [locale, setLocale] = React.useState('ru');
   let [value, setValue] = React.useState([
@@ -55,7 +60,7 @@ export default function LocalizedTimePicker() {
       setIntervalData(response.data.logs.reverse());
     });
     axios
-      .get(`${process.env.REACT_APP_SERVER_URL}/add_interval`)
+      .get(`${process.env.REACT_APP_SERVER_URL}/add_interval`,{headers})
       .then((response) => {
         console.log('interval data is');
         console.log(response.data.intervals);
@@ -91,7 +96,7 @@ export default function LocalizedTimePicker() {
 
 
   const getIntervalData = (params) => {
-    axios.get(`${process.env.REACT_APP_SERVER_URL}/logs`).then((response) => {
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/logs`,{headers}).then((response) => {
       console.log(response.data);
       setIntervalData(response.data.logs);
     });

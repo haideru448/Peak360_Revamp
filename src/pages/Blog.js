@@ -15,6 +15,10 @@ import Page from '../components/Page';
 import Iconify from '../components/Iconify';
 import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from '../sections/@dashboard/blog';
 
+const headers = {
+  'Authorization':process.env.REACT_APP_API_KEY
+}
+
 let data;
 // ----------------------------------------------------------------------
 
@@ -46,7 +50,8 @@ export default function Blog() {
   });
 
   React.useEffect(() => {
-    axios.get('https://api-dev.peak360.fitness/client').then((response) => {
+    
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/client`,{headers}).then((response) => {
       const tField=true
       
       // handle success
@@ -89,7 +94,7 @@ export default function Blog() {
 
       try {
 
-        axios.post(`${process.env.REACT_APP_SERVER_URL}/ftp_credentials`, data).then((response) => {
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/ftp_credentials`, data,{headers}).then((response) => {
           // handle success
           
           toast.success(response.data.message)
@@ -118,7 +123,7 @@ export default function Blog() {
 
 function getFTPCredentials()
 {let configurations;
-  axios.get(`${process.env.REACT_APP_SERVER_URL}/ftp_credentials`).then((response) => {
+  axios.get(`${process.env.REACT_APP_SERVER_URL}/ftp_credentials`,{headers}).then((response) => {
   
     // handle success
     
@@ -176,7 +181,7 @@ function getFTPCredentials()
         "id": currentClientId
       }
 
-      axios.post(`${process.env.REACT_APP_SERVER_URL}/client`, data).then((response) => {
+      axios.post(`${process.env.REACT_APP_SERVER_URL}/client`, data,{headers}).then((response) => {
         // handle success
         
         toast.success(response.data.message)
