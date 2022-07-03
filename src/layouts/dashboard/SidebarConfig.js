@@ -18,7 +18,7 @@ const sidebarConfig = [
   },
  {
     title: 'Scheduler',
-    path: '/dashboard/scheduler',
+    path: '/dashboard/schedule',
     icon: getIcon('eva:shopping-bag-fill')
   },
   {

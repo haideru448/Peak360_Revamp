@@ -134,7 +134,7 @@ export default function LocalizedTimePicker() {
 
     const data = { intervals: filteredArray, count: noOfIntervals };
     axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/add_interval`, data)
+      .post(`${process.env.REACT_APP_SERVER_URL}/add_interval`, data,{headers})
       .then((response) => {
         console.log("in the add intervals succesd")
         toast.success('Intervals Added');
