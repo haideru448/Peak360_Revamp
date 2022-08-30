@@ -21,7 +21,7 @@ const headers = {
   Authorization: process.env.REACT_APP_API_KEY
 };
 
-// let data;
+let data;
 // const pattern = ;
 
 // ----------------------------------------------------------------------
@@ -129,7 +129,7 @@ export default function Blog() {
 
   const clientValueId = (e) => {
     // console.log(e.target.value.length)
-    if(e.target.value.length<=12)
+    if(e.target.value.length<=15)
       {setclientId(e.target.value);}
     
   };
@@ -148,27 +148,22 @@ export default function Blog() {
 
     // }
     else {
-      if (new RegExp('^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$').test(clientId)) {
-        console.log('a valid password', clientId);
-        data = {
-          clientId,
-          id: currentClientId
-        };
+      data = {
+        clientId,
+        id: currentClientId
+      };
 
-        axios
-          .post(`${process.env.REACT_APP_SERVER_URL}/client`, data, { headers })
-          .then((response) => {
-            // handle success
+      axios
+        .post(`${process.env.REACT_APP_SERVER_URL}/client`, data, { headers })
+        .then((response) => {
+          // handle success
 
-            toast.success(response.data.message);
-            setTextFieldState(true);
-          })
-          .catch((err) => {
-            console.error('Due to some Error request failed: ', err);
-          });
-      } else {
-        toast.error('Password must be Alphanumeric');
-      }
+          toast.success(response.data.message);
+          setTextFieldState(true);
+        })
+        .catch((err) => {
+          console.error('Due to some Error request failed: ', err);
+        });
     }
   };
   return (
