@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react'
+/* eslint-disable */
+
+import React, { useEffect, useState } from 'react';
 // material
-import { Grid, Button, Container, Stack, Typography,Box } from '@mui/material';
+import { Grid, Button, Container, Stack, Typography, Box } from '@mui/material';
 import toast, { Toaster } from 'react-hot-toast';
 
 // components
-import axios from 'axios'
+import axios from 'axios';
 import TextField from '@mui/material/TextField';
 import TimePicker from '@mui/lab/TimePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -16,10 +18,12 @@ import Iconify from '../components/Iconify';
 import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from '../sections/@dashboard/blog';
 
 const headers = {
-  'Authorization':process.env.REACT_APP_API_KEY
-}
+  Authorization: process.env.REACT_APP_API_KEY
+};
 
-let data;
+// let data;
+// const pattern = ;
+
 // ----------------------------------------------------------------------
 
 const SORT_OPTIONS = [
@@ -34,232 +38,268 @@ export default function Blog() {
   const [currentClientId, setcurrentClientId] = React.useState(-1);
   const [textFieldState, setTextFieldState] = React.useState(true);
   const [ftpCredentialsState, setFtpCredentialsState] = React.useState(true);
-  const [ftpConfigurations, setFtpConfigurations] = React.useState({username:"",password:"",ip:""});
-  const [ftpConfigurationsName, setFtpConfigurationsName] = React.useState("");
+  const [ftpConfigurations, setFtpConfigurations] = React.useState({
+    username: '',
+    password: '',
+    ip: ''
+  });
+  const [ftpConfigurationsName, setFtpConfigurationsName] = React.useState('');
 
-
-
-
-  const [clientId, setclientId] = React.useState("");
+  const [clientId, setclientId] = React.useState('');
   const [value, setValue] = React.useState(new Date('2014-08-18T21:11:54'));
   const [value2, setValue2] = React.useState(new Date('2014-08-18T21:11:54'));
   const [state, setState] = React.useState({
     open: false,
     vertical: 'top',
-    horizontal: 'center',
+    horizontal: 'center'
   });
 
   React.useEffect(() => {
-    
-    axios.get(`${process.env.REACT_APP_SERVER_URL}/client`,{headers}).then((response) => {
-      const tField=true
-      
-      // handle success
-      
-      setclientId(response.data.client_id[0].client_id)
-      setcurrentClientId(response.data.client_id[0].id)
-      
-   
-      getFTPCredentials()
+    axios
+      .get(`${process.env.REACT_APP_SERVER_URL}/client`, { headers })
+      .then((response) => {
+        const tField = true;
 
+        // handle success
 
-    }).catch((err) => {
-      setTextFieldState(true)
-      console.error("Due to some Error request failed: ", err);
+        setclientId(response.data.client_id[0].client_id);
+        setcurrentClientId(response.data.client_id[0].id);
 
-
-    });
-
+        getFTPCredentials();
+      })
+      .catch((err) => {
+        setTextFieldState(true);
+        console.error('Due to some Error request failed: ', err);
+      });
   }, []);
 
   const Schema = Yup.object().shape({
     ip: Yup.string().required('Ip is required'),
     userName: Yup.string().required('username is required'),
-    password: Yup.string().required('Password is required'),
+    password: Yup.string().required('Password is required')
   });
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      ip: ftpConfigurations?.ip ?? '' ,
-      userName: ftpConfigurations?.username ?? '' ,
+      ip: ftpConfigurations?.ip ?? '',
+      userName: ftpConfigurations?.username ?? '',
       password: ftpConfigurations?.password ?? '',
-      port:ftpConfigurations?.port ?? '' ,
+      port: ftpConfigurations?.port ?? ''
       // label: '',
       // artistName: 'ajdlkfjl',
       // language: '',
-
     },
     validationSchema: Schema,
     onSubmit: async (data) => {
-
       try {
+        axios
+          .post(`${process.env.REACT_APP_SERVER_URL}/ftp_credentials`, data, { headers })
+          .then((response) => {
+            // handle success
 
-        axios.post(`${process.env.REACT_APP_SERVER_URL}/ftp_credentials`, data,{headers}).then((response) => {
-          // handle success
-          
-          toast.success(response.data.message)
-          setTextFieldState(true)
-  
-        }).catch((err) => {
-          console.error("Due to some Error request failed: ", err);
-  
-  
-        });
-        
-      
-        
+            toast.success(response.data.message);
+            setTextFieldState(true);
+          })
+          .catch((err) => {
+            console.error('Due to some Error request failed: ', err);
+          });
       } catch (err) {
-        
         //
       }
     }
   });
- 
+
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
 
+  function getFTPCredentials() {
+    let configurations;
+    axios
+      .get(`${process.env.REACT_APP_SERVER_URL}/ftp_credentials`, { headers })
+      .then((response) => {
+        // handle success
 
-
-
-
-function getFTPCredentials()
-{let configurations;
-  axios.get(`${process.env.REACT_APP_SERVER_URL}/ftp_credentials`,{headers}).then((response) => {
-  
-    // handle success
-    
-    setFtpConfigurations(response.data.credentials[0])
-    
-    
-  
-  }).catch((err) => {
-    
-  
-  });
-  
-} 
-
-  function handleClick() {
-    
-    setState({ open: true, vertical: 'top', horizontal: 'center', });
-  };
-
-  function handleClose() {
-    setState({ open: false, vertical: 'top', horizontal: 'center', });
-  };
-
-
-  const handleChange = (newValue) => {
-    setValue(newValue);
-  };
-  const handleChange2 = (newValue) => {
-    setValue2(newValue);
-  };
-  function enableFTPCredentialsField()
-  {setFtpCredentialsState(false)
+        setFtpConfigurations(response.data.credentials[0]);
+      })
+      .catch((err) => {});
   }
-  
 
 
-
+  function enableFTPCredentialsField() {
+    setFtpCredentialsState(false);
+  }
 
   const clientValueId = (e) => {
-
-    setclientId(e.target.value)
-
-  }
+    // console.log(e.target.value.length)
+    if(e.target.value.length<=12)
+      {setclientId(e.target.value);}
+    
+  };
   const saveClientId = () => {
+    console.log(clientId);
+
     if (clientId.length < 12) {
-      
-      handleClick()
-      setTimeout(() => { handleClose() }, 3000);
-
+      toast.error('Password Length must be 12')
+      // handleClick();
+      // setTimeout(() => {
+      //   handleClose();
+      // }, 3000);
     }
+    //   else if(!/^[A-Za-z]*$/.test('1212121A') && !/^[0-9]*$/.test('1212121A'))
+    //   {console.log('not a valid password')
 
+    // }
     else {
-      data = {
-        "clientId": clientId,
-        "id": currentClientId
+      if (new RegExp('^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$').test(clientId)) {
+        console.log('a valid password', clientId);
+        data = {
+          clientId,
+          id: currentClientId
+        };
+
+        axios
+          .post(`${process.env.REACT_APP_SERVER_URL}/client`, data, { headers })
+          .then((response) => {
+            // handle success
+
+            toast.success(response.data.message);
+            setTextFieldState(true);
+          })
+          .catch((err) => {
+            console.error('Due to some Error request failed: ', err);
+          });
+      } else {
+        toast.error('Password must be Alphanumeric');
       }
-
-      axios.post(`${process.env.REACT_APP_SERVER_URL}/client`, data,{headers}).then((response) => {
-        // handle success
-        
-        toast.success(response.data.message)
-        setTextFieldState(true)
-
-      }).catch((err) => {
-        console.error("Due to some Error request failed: ", err);
-
-
-      });
     }
-
-  }
+  };
   return (
     <Page title="Dashboard: Interactive | Peak360">
       <Container>
-
         <Typography variant="h4" gutterBottom>
           Landlord Server Settings
-        </Typography><br /><br />
+        </Typography>
+        <br />
+        <br />
 
-        <center><TextField disabled={textFieldState} type="number" style={{ "width": "40%" }} id="standard-basic" label="Enter Client Id" variant="filled" value={clientId} onChange={clientValueId} /><br /><br /><br />
-        <Box sx={{display:"flex",alignItems:"center"}}>  <Button sx={{marginLeft:"auto"}}  variant="contained" onClick={saveClientId}>Save</Button><br /><br /><br />
-         &nbsp;&nbsp;&nbsp; <Button sx={{marginRight:"auto"}} variant="contained" onClick={()=>{setTextFieldState(false)
-        
-        
-        }}>Edit</Button></Box>
-        <Toaster
-  position="top-center"
-  reverseOrder={false}
-/>
-
-        </center>
-       
-        <FormikProvider value={formik}>
-        <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-        <center><TextField
-        
-        {...getFieldProps('ip')}
-                  error={Boolean(touched.ip && errors.ip)}
-                  helperText={touched.ip && errors.ip}
-                  disabled={ftpCredentialsState} type="text" style={{ "width": "40%" }} name="ip" id="standard-basic" label="FTP IP" variant="filled"  /><br /><br />
-        <TextField
-        {...getFieldProps('userName')}
-        error={Boolean(touched.userName && errors.userName)}
-        helperText={touched.userName && errors.userName}
-        disabled={ftpCredentialsState} type="text" style={{ "width": "40%" }} name="userName" id="standard-basic" label="FTP Username" variant="filled" /><br /><br />
-        <TextField
-          {...getFieldProps('password')}
-          error={Boolean(touched.password && errors.password)}
-          helperText={touched.password && errors.password}
-        
-        disabled={ftpCredentialsState} type="password" style={{ "width": "40%" }} name="password" id="standard-basic" label="FTP Password" variant="filled"  /><br /><br />
+        <center>
           <TextField
-        {...getFieldProps('port')}
-        error={Boolean(touched.port && errors.port)}
-        helperText={touched.port && errors.port}
-        disabled={ftpCredentialsState} type="text" style={{ "width": "40%" }} name="port" id="standard-basic" label="Port" variant="filled" />
-
-        
-        <br /><br />
-        <Box sx={{display:"flex",alignItems:"center"}}>  <Button
-        type="submit"
-        sx={{marginLeft:"auto"}}  variant="contained" >Save</Button><br /><br /><br />
-       
-         &nbsp;&nbsp;&nbsp; <Button sx={{marginRight:"auto"}} variant="contained" onClick={()=>{enableFTPCredentialsField()}}>Edit</Button></Box>
-        <Toaster
-  position="top-center"
-  reverseOrder={false}
-/>
-
+            disabled={textFieldState}
+            type="text"
+            style={{ width: '40%' }}
+            id="standard-basic"
+            label="Enter Client Id"
+            variant="filled"
+            value={clientId}
+            onChange={clientValueId}
+          />
+          <br />
+          <br />
+          <br />
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {' '}
+            <Button sx={{ marginLeft: 'auto' }} variant="contained" onClick={saveClientId}>
+              Save
+            </Button>
+            <br />
+            <br />
+            <br />
+            &nbsp;&nbsp;&nbsp;{' '}
+            <Button
+              sx={{ marginRight: 'auto' }}
+              variant="contained"
+              onClick={() => {
+                setTextFieldState(false);
+              }}
+            >
+              Edit
+            </Button>
+          </Box>
+          <Toaster position="top-center" reverseOrder={false} />
         </center>
-        </Form>
+
+        <FormikProvider value={formik}>
+          <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+            <center>
+              <TextField
+                {...getFieldProps('ip')}
+                error={Boolean(touched.ip && errors.ip)}
+                helperText={touched.ip && errors.ip}
+                disabled={ftpCredentialsState}
+                type="text"
+                style={{ width: '40%' }}
+                name="ip"
+                id="standard-basic"
+                label="FTP IP"
+                variant="filled"
+              />
+              <br />
+              <br />
+              <TextField
+                {...getFieldProps('userName')}
+                error={Boolean(touched.userName && errors.userName)}
+                helperText={touched.userName && errors.userName}
+                disabled={ftpCredentialsState}
+                type="text"
+                style={{ width: '40%' }}
+                name="userName"
+                id="standard-basic"
+                label="FTP Username"
+                variant="filled"
+              />
+              <br />
+              <br />
+              <TextField
+                {...getFieldProps('password')}
+                error={Boolean(touched.password && errors.password)}
+                helperText={touched.password && errors.password}
+                disabled={ftpCredentialsState}
+                type="password"
+                style={{ width: '40%' }}
+                name="password"
+                id="standard-basic"
+                label="FTP Password"
+                variant="filled"
+              />
+              <br />
+              <br />
+              <TextField
+                {...getFieldProps('port')}
+                error={Boolean(touched.port && errors.port)}
+                helperText={touched.port && errors.port}
+                disabled={ftpCredentialsState}
+                type="text"
+                style={{ width: '40%' }}
+                name="port"
+                id="standard-basic"
+                label="Port"
+                variant="filled"
+              />
+
+              <br />
+              <br />
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                {' '}
+                <Button type="submit" sx={{ marginLeft: 'auto' }} variant="contained">
+                  Save
+                </Button>
+                <br />
+                <br />
+                <br />
+                &nbsp;&nbsp;&nbsp;{' '}
+                <Button
+                  sx={{ marginRight: 'auto' }}
+                  variant="contained"
+                  onClick={() => {
+                    enableFTPCredentialsField();
+                  }}
+                >
+                  Edit
+                </Button>
+              </Box>
+              <Toaster position="top-center" reverseOrder={false} />
+            </center>
+          </Form>
         </FormikProvider>
-
-
-
-
       </Container>
     </Page>
   );
