@@ -69,7 +69,6 @@ export default function Blog() {
       })
       .catch((err) => {
         setTextFieldState(true);
-        console.error('Due to some Error request failed: ', err);
       });
   }, []);
 
