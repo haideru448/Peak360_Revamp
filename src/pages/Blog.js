@@ -137,7 +137,7 @@ export default function Blog() {
     console.log(clientId);
 
     if (clientId.length < 12) {
-      toast.error('Password Length must be 12')
+      toast.error('ClientId Length must be atleast 12')
       // handleClick();
       // setTimeout(() => {
       //   handleClose();
