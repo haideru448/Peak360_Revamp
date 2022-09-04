@@ -12,6 +12,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import Paper from '@mui/material/Paper';
 import axios from 'axios';
+import Switch from '@mui/material/Switch';
+
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -36,9 +38,8 @@ const localeMap = {
 let j = 0;
 
 const headers = {
-  'Authorization':process.env.REACT_APP_API_KEY
-}
-
+  Authorization: process.env.REACT_APP_API_KEY
+};
 
 export default function LocalizedTimePicker() {
   const [locale, setLocale] = React.useState('ru');
@@ -51,19 +52,24 @@ export default function LocalizedTimePicker() {
   ]);
   const [disabledState, setDisabledState] = React.useState(true);
   const [intervalsData, setIntervalsData] = React.useState([]);
+  const [isActivated, setIsActivated] = React.useState(false);
+
 
   const [intervalData, setIntervalData] = React.useState([]);
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_SERVER_URL}/logs`,{headers}).then((response) => {
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/logs`, { headers }).then((response) => {
       console.log(response.data);
       setIntervalData(response.data.logs.reverse());
     });
     axios
-      .get(`${process.env.REACT_APP_SERVER_URL}/add_interval`,{headers})
+      .get(`${process.env.REACT_APP_SERVER_URL}/add_interval`, { headers })
       .then((response) => {
         console.log('interval data is');
         console.log(response.data.intervals);
+        console.log(response.data.is_activated);
+        setIsActivated(response.data.is_activated)
+
 
         setIntervalsData(response.data.intervals);
         console.log('the length of inttervals data is', response.data.intervals.length);
@@ -88,21 +94,17 @@ export default function LocalizedTimePicker() {
         value.push(new Date(`2011-07-14 ${intervalsData[j]}`));
       }
       setValue(value);
-      setNoOfIntervals(intervalsLength)
+      setNoOfIntervals(intervalsLength);
       console.log('the value is', value);
     };
   }, []);
 
-
-
   const getIntervalData = (params) => {
-    axios.get(`${process.env.REACT_APP_SERVER_URL}/logs`,{headers}).then((response) => {
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/logs`, { headers }).then((response) => {
       console.log(response.data);
       setIntervalData(response.data.logs);
     });
-    
-    
-  }
+  };
 
   let [noOfIntervals, setNoOfIntervals] = React.useState(3);
   const [noOfChange, setNoOfChange] = React.useState(0);
@@ -120,9 +122,10 @@ export default function LocalizedTimePicker() {
     console.log(value);
     let i = 0;
     for (i = 0; i < noOfIntervals; i += 1) {
-      console.log("the value of i",value[i])
-     if(value[i]===null || value[i]==='' || value[i]===undefined  )
-     {continue} 
+      console.log('the value of i', value[i]);
+      if (value[i] === null || value[i] === '' || value[i] === undefined) {
+        continue;
+      }
       console.log(value[i].getHours());
 
       filteredArray.push(
@@ -132,14 +135,14 @@ export default function LocalizedTimePicker() {
       );
     }
 
-    const data = { intervals: filteredArray, count: noOfIntervals };
+    const data = { intervals: filteredArray, count: noOfIntervals,is_activated:isActivated };
     axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/add_interval`, data,{headers})
+      .post(`${process.env.REACT_APP_SERVER_URL}/add_interval`, data, { headers })
       .then((response) => {
-        console.log("in the add intervals succesd")
+        console.log('in the add intervals succesd');
         toast.success('Intervals Added');
-        
-        getIntervalData()
+
+        getIntervalData();
       })
       .catch(() => {
         toast.error('Please Try Again Later');
@@ -163,12 +166,16 @@ export default function LocalizedTimePicker() {
 
   return (
     <>
+   <center> <h3>Activated</h3>
+    <Switch checked={isActivated} onChange={(e)=>{console.log('iam changed',e.target.checked
+    
+    )
+    setIsActivated(e.target.checked)
+    }}/> </center>
       <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={localeMap[locale]}>
         <div>
-        <Toaster
-  position="top-center"
-  reverseOrder={false}
-/>
+        
+          <Toaster position="top-center" reverseOrder={false} />
           <center>
             {_.times(noOfIntervals, (index) => (
               <>
@@ -190,9 +197,9 @@ export default function LocalizedTimePicker() {
               <Button
                 variant="contained"
                 onClick={() => {
-                  if (noOfIntervals !== 5){
-                    setNoOfIntervals(noOfIntervals + 1)
-                  } ;
+                  if (noOfIntervals !== 5) {
+                    setNoOfIntervals(noOfIntervals + 1);
+                  }
                 }}
               >
                 +{' '}
