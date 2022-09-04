@@ -1,47 +1,47 @@
-/* eslint-disable */
-import React, { useEffect } from 'react';
-import frLocale from 'date-fns/locale/fr';
-import ruLocale from 'date-fns/locale/ru';
-import arSaLocale from 'date-fns/locale/ar-SA';
-import enLocale from 'date-fns/locale/en-US';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import TextField from '@mui/material/TextField';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import Paper from '@mui/material/Paper';
-import axios from 'axios';
-import Switch from '@mui/material/Switch';
+  /* eslint-disable */
+  import React, { useEffect } from 'react';
+  import frLocale from 'date-fns/locale/fr';
+  import ruLocale from 'date-fns/locale/ru';
+  import arSaLocale from 'date-fns/locale/ar-SA';
+  import enLocale from 'date-fns/locale/en-US';
+  import ToggleButton from '@mui/material/ToggleButton';
+  import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+  import TextField from '@mui/material/TextField';
+  import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+  import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+  import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+  import Paper from '@mui/material/Paper';
+  import axios from 'axios';
+  import Switch from '@mui/material/Switch';
 
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
+  import Table from '@mui/material/Table';
+  import TableBody from '@mui/material/TableBody';
+  import TableCell from '@mui/material/TableCell';
 
-import TableContainer from '@mui/material/TableContainer';
-import toast, { Toaster } from 'react-hot-toast';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import _ from 'lodash';
-import Tooltip from '@mui/material/Tooltip';
-import { Button, Typography, Box } from '@mui/material';
-import List from '../components/List';
+  import TableContainer from '@mui/material/TableContainer';
+  import toast, { Toaster } from 'react-hot-toast';
+  import TableHead from '@mui/material/TableHead';
+  import TablePagination from '@mui/material/TablePagination';
+  import TableRow from '@mui/material/TableRow';
+  import _ from 'lodash';
+  import Tooltip from '@mui/material/Tooltip';
+  import { Button, Typography, Box } from '@mui/material';
+  import List from '../components/List';
 
-const localeMap = {
+  const localeMap = {
   en: enLocale,
   fr: frLocale,
   ru: ruLocale,
   ar: arSaLocale
-};
+  };
 
-let j = 0;
+  let j = 0;
 
-const headers = {
+  const headers = {
   Authorization: process.env.REACT_APP_API_KEY
-};
+  };
 
-export default function LocalizedTimePicker() {
+  export default function LocalizedTimePicker() {
   const [locale, setLocale] = React.useState('ru');
   let [value, setValue] = React.useState([
     new Date('2011-07-14 15:00'),
@@ -166,7 +166,7 @@ export default function LocalizedTimePicker() {
 
   return (
     <>
-   <center> <h3>Activated</h3>
+    <center> <h3>{isActivated?'On':'Off'}</h3>
     <Switch checked={isActivated} onChange={(e)=>{console.log('iam changed',e.target.checked
     
     )
@@ -266,4 +266,4 @@ export default function LocalizedTimePicker() {
       </Paper>
     </>
   );
-}
+  }
